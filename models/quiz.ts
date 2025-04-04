@@ -17,7 +17,15 @@ const quizSchema = new mongoose.Schema(
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"quizSubmission"
             }
-        ]
+        ],
+        isactive:{
+            type:Boolean,
+            default:false,
+        },
+        lastdate:{
+            type:Date,
+            required:[true,"Mention the last date."]
+        }
     },
     {
         timestamps:true

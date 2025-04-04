@@ -1,274 +1,111 @@
-"use client"
+"use client";
+import { JSX, useState } from "react";
+import { 
+  FiMenu, FiBookOpen, FiUsers, FiClipboard, 
+  FiBarChart2, FiUser, FiLogOut, FiEdit 
+} from "react-icons/fi";
+import { BsPencilSquare } from "react-icons/bs";
 
-import React from "react";
-import DashboardLayout from "@/components/DashboardLayout";
-import ProfileCard from "@/components/ProfileCard";
-import CourseCard from "@/components/CourseCards";
-import QuizCard from "@/components/QuizCard";
-import StatCard from "@/components/StatCard";
-import StudentListCard from "@/components/StudentListCard";
-import AnalyticsChart from "@/components/AnalyticsChart";
-import { BookOpen, Users, Award, FileText } from "lucide-react";
-import { useRouter } from "next/navigation";
+const Dashboard = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-// Mock data
-const facultyData = {
-  name: "Dr. Michael Chen",
-  email: "michael.chen@example.com",
-  facultyId: "FAC54321",
-  department: "Computer Science"
-};
-
-const coursesData = [
-  {
-    id: 1,
-    title: "Data Structures and Algorithms",
-    instructor: "Dr. Michael Chen",
-    progress: 100,
-    bgColor: "bg-elearn-secondary"
-  },
-  {
-    id: 2,
-    title: "Advanced Database Systems",
-    instructor: "Dr. Michael Chen",
-    progress: 80,
-    bgColor: "bg-elearn-tertiary"
-  },
-  {
-    id: 3,
-    title: "Machine Learning Fundamentals",
-    instructor: "Dr. Michael Chen",
-    progress: 60,
-    bgColor: "bg-elearn-primary"
-  },
-  {
-    id: 4,
-    title: "Cloud Computing",
-    instructor: "Dr. Michael Chen",
-    progress: 0,
-    upcoming: true,
-    bgColor: "bg-elearn-accent"
-  },
-];
-
-const quizzesData = [
-  {
-    id: 1,
-    title: "Binary Trees",
-    courseName: "Data Structures and Algorithms",
-    date: "April 1, 2025",
-    questions: 12,
-    duration: "40 min",
-    status: "completed" as const
-  },
-  {
-    id: 2,
-    title: "Graph Algorithms",
-    courseName: "Data Structures and Algorithms",
-    date: "April 10, 2025",
-    questions: 15,
-    duration: "45 min",
-    status: "upcoming" as const
-  },
-  {
-    id: 3,
-    title: "Database Normalization",
-    courseName: "Advanced Database Systems",
-    date: "April 15, 2025",
-    questions: 10,
-    duration: "30 min",
-    status: "upcoming" as const
-  }
-];
-const studentsData = [
-  {
-    id: "s1",
-    name: "Alex Johnson",
-    email: "alex.johnson@example.com",
-    progress: 75,
-    lastActive: "Today",
-    performance: "excellent" as const
-  },
-  {
-    id: "s2",
-    name: "Emily Williams",
-    email: "emily.williams@example.com",
-    progress: 65,
-    lastActive: "2 days ago",
-    performance: "good" as const
-  },
-  {
-    id: "s3",
-    name: "David Brown",
-    email: "david.brown@example.com",
-    progress: 45,
-    lastActive: "Yesterday",
-    performance: "average" as const
-  },
-  {
-    id: "s4",
-    name: "Sarah Davis",
-    email: "sarah.davis@example.com",
-    progress: 30,
-    lastActive: "1 week ago",
-    performance: "poor" as const
-  },
-  {
-    id: "s5",
-    name: "James Wilson",
-    email: "james.wilson@example.com",
-    progress: 80,
-    lastActive: "Today",
-    performance: "excellent" as const
-  }
-];
-
-const analyticsLineData = [
-  { name: "Week 1", completion: 40, engagement: 30, satisfaction: 70 },
-  { name: "Week 2", completion: 50, engagement: 45, satisfaction: 75 },
-  { name: "Week 3", completion: 55, engagement: 60, satisfaction: 80 },
-  { name: "Week 4", completion: 70, engagement: 65, satisfaction: 85 },
-  { name: "Week 5", completion: 75, engagement: 70, satisfaction: 82 },
-  { name: "Week 6", completion: 85, engagement: 80, satisfaction: 87 },
-];
-
-const analyticsPieData = [
-  { name: "Excellent", value: 40, color: "#27187E" },
-  { name: "Good", value: 30, color: "#758BFD" },
-  { name: "Average", value: 20, color: "#AEB8FE" },
-  { name: "Poor", value: 10, color: "#FF8600" },
-];
-
-export default function FacultyDashboard() {
-  const router = useRouter();
+  const courses = [
+    { title: "Data Structures and Algorithms", color: "bg-[#758BFD]" },
+    { title: "Advanced Database Systems", color: "bg-[#AEB8FE]" },
+    { title: "Machine Learning Fundamentals", color: "bg-[#27187E]" },
+    { title: "Cloud Computing", color: "bg-[#FF8600]" },
+  ];
 
   return (
-    <DashboardLayout userType="faculty">
-      <div className="space-y-6">
-        <h1 className="text-2xl font-bold mb-6">Faculty Dashboard</h1>
-        
-        <ProfileCard 
-          userType="faculty"
-          name={facultyData.name}
-          email={facultyData.email}
-          facultyId={facultyData.facultyId}
-          department={facultyData.department}
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard 
-            title="Active Courses" 
-            value={3} 
-            icon={BookOpen} 
-          />
-          <StatCard 
-            title="Total Students" 
-            value={112} 
-            icon={Users}
-            trend={{ value: 8, isPositive: true }}
-          />
-          <StatCard 
-            title="Avg. Performance" 
-            value="78%" 
-            icon={Award}
-            trend={{ value: 5, isPositive: true }}
-          />
-          <StatCard 
-            title="Active Quizzes" 
-            value={5} 
-            icon={FileText}
-          />
-        </div>
-        
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">My Courses</h2>
-            <button 
-              className="text-[#758BFD] hover:text-elearn-primary transition-colors"
-              onClick={() => router.push("/faculty/courses")}
-            >
-              View all
+    <div className="flex flex-col h-screen bg-[#F1F2F6]">
+      {/* Header */}
+      <header className="bg-white shadow-md py-4 text-center text-xl font-bold">
+        <span className="text-[#27187E]">UNILEARN</span>
+      </header>
+
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <div className={`${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-5 transition-all duration-300`}>
+          <div className="flex items-center justify-between">
+            <h1 className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-bold`}>Unilearn</h1>
+            <button onClick={() => setSidebarOpen(!isSidebarOpen)}>
+              <FiMenu size={24} />
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {coursesData.slice(0, 4).map((course) => (
-              <CourseCard 
-                key={course.id}
-                title={course.title}
-                instructor={course.instructor}
-                progress={course.progress}
-                bgColor={course.bgColor}
-                upcoming={course.upcoming}
-                onClick={() => router.push(`/faculty/courses/${course.id}`)}
-              />
+          <nav className="mt-10">
+            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
+          </nav>
+          <div className="mt-auto">
+            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 p-8">
+          {/* Faculty Info Card */}
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-[#27187E]">Faculty Dashboard</h2>
+              <div className="bg-[#F8F9FC] p-4 rounded-lg mt-4 shadow-sm">
+                <h3 className="text-lg font-bold text-[#27187E]">Dr. Michael Chen</h3>
+                <p className="text-gray-600">michael.chen@example.com</p>
+                <p className="text-gray-500">Department: Computer Science</p>
+                <p className="text-gray-500">Faculty ID: FAC54321</p>
+              </div>
+            </div>
+            <button className="bg-[#758BFD] text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <FiEdit /> Edit Profile
+            </button>
+          </div>
+
+          {/* Stats Section */}
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <StatCard title="Active Courses" value="3" icon={<FiBookOpen size={30} />} />
+            <StatCard title="Total Students" value="112" icon={<FiUsers size={30} />} />
+            <StatCard title="Avg. Performance" value="78%" icon={<FiBarChart2 size={30} />} />
+            <StatCard title="Active Quizzes" value="5" icon={<FiClipboard size={30} />} />
+          </div>
+
+          {/* Courses Section */}
+          <h3 className="mt-6 text-xl font-bold text-[#27187E]">My Courses</h3>
+          <div className="grid grid-cols-4 gap-4 mt-4">
+            {courses.map((course, index) => (
+              <div key={index} className={`${course.color} text-white p-6 h-40 rounded-lg shadow-lg flex items-center justify-center hover:scale-105 transition-transform cursor-pointer`}>
+                <h4 className="text-lg font-bold text-center">{course.title}</h4>
+              </div>
             ))}
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Upcoming Quizzes</h2>
-              <button 
-                className="text-elearn-secondary hover:text-elearn-primary transition-colors"
-                onClick={() => router.push("/faculty/quizzes")}
-              >
-                View all
-              </button>
-            </div>
-            <div className="space-y-4">
-              {quizzesData.slice(0, 3).map((quiz) => (
-                <QuizCard 
-                  key={quiz.id}
-                  title={quiz.title}
-                  courseName={quiz.courseName}
-                  date={quiz.date}
-                  questions={quiz.questions}
-                  duration={quiz.duration}
-                  status={quiz.status}
-                  onClick={() => router.push(`/faculty/quizzes/${quiz.id}`)}
-                />
-              ))}
-            </div>
-          </div>
-          
-          <div>
-            <h2 className="text-xl font-bold mb-4">Student Performance Distribution</h2>
-            <AnalyticsChart 
-              lineData={analyticsLineData}
-              pieData={analyticsPieData}
-              title="Performance Breakdown"
-              type="pie"
-            />
-          </div>
-        </div>
-        
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Students</h2>
-            <button 
-              className="text-elearn-secondary hover:text-elearn-primary transition-colors"
-              onClick={() => router.push("/faculty/students")}
-            >
-              View all
-            </button>
-          </div>
-          <StudentListCard 
-            students={studentsData}
-            onViewStudent={(id) => router.push(`/faculty/students/${id}`)}
-          />
-        </div>
-        
-        <div>
-          <h2 className="text-xl font-bold mb-4">Course Analytics</h2>
-          <AnalyticsChart 
-            lineData={analyticsLineData}
-            pieData={analyticsPieData}
-            title="Weekly Progress Metrics"
-            type="line"
-          />
-        </div>
       </div>
-    </DashboardLayout>
+
+      {/* Footer */}
+      <footer className="bg-[#1E1E2F] text-white text-center py-3">
+        © {new Date().getFullYear()} Unilearn. All rights reserved.
+      </footer>
+    </div>
   );
-}
+};
+
+const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: boolean }) => (
+  <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+    <Icon size={20} />
+    <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
+  </div>
+);
+
+const StatCard = ({ title, value, icon }: { title: string; value: string; icon: JSX.Element }) => (
+  <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
+    <div className="text-[#27187E]">{icon}</div>
+    <div>
+      <h4 className="text-sm text-gray-500">{title}</h4>
+      <p className="text-xl font-bold text-[#27187E]">{value}</p>
+    </div>
+  </div>
+);
+
+export default Dashboard;
