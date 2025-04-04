@@ -59,7 +59,7 @@ const AdminDashboard = () => {
           {/* Navigation */}
           <nav className="flex-1">
             <SidebarLink Icon={FiUsers} text="User Management" isOpen={isSidebarOpen} href="/admin/create-user" />
-            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} href="" />
+            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} href="admin/courses" />
             <SidebarLink Icon={FiBarChart2} text="Reports" isOpen={isSidebarOpen} href="/admin/report-generation"/>
             <SidebarLink Icon={FiClipboard} text="System Monitoring" isOpen={isSidebarOpen} href="/admin/system-monitoring" />
             <SidebarLink Icon={FiVolume2} text="Announcements" isOpen={isSidebarOpen} href="/admin/announcements"/>
