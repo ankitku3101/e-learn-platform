@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link"; // ← IMPORT LINK
 import { JSX, useState } from "react";
 import {
   FiMenu, FiBookOpen, FiUsers, FiClipboard,
@@ -32,7 +33,6 @@ const Dashboard = () => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <div className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-4 transition-all duration-300 flex flex-col`}>
-          {/* Sidebar Toggle - repositioned to top-right */}
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
             className="absolute top-4 right-4 text-white hover:text-gray-300"
@@ -40,33 +40,29 @@ const Dashboard = () => {
             <FiMenu size={24} />
           </button>
 
-          <div className="flex items-center justify-center mb-6 mt-6">  
-          </div>
+          <div className="flex items-center justify-center mb-6 mt-6" />
 
-          {/* Navigation */}
+          {/* Navigation with links */}
           <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiBookOpen} text="Dashboard" href="/dashboard" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={BsPencilSquare} text="My Courses" href="/courses" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUsers} text="Students" href="/students" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" href="/quizzes" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiBarChart2} text="Analytics" href="/analytics" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUser} text="Profile" href="/profile" isOpen={isSidebarOpen} />
           </nav>
           <div className="mt-auto border-t pt-4">
-            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiLogOut} text="Logout" href="/logout" isOpen={isSidebarOpen} />
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 p-8">
-          {/* Brand Title */}
-          
-
           {/* Faculty Info Card */}
           <div className="bg-white p-6 rounded-2xl shadow-md flex items-center justify-between hover:shadow-xl transition-all duration-300 border border-gray-100">
             <div>
-              <h2 className="text-2xl font-bold text-[#27187E] text-center sm:text-left">Faculty Dashboard</h2>
-              <div className="bg-[#F8F9FC] p-4 rounded-xl mt-2 shadow-sm border border-gray-200 transition hover:bg-[#eef1fb]">
+              <h2 className="text-2xl font-bold text-[#27187E]">Faculty Dashboard</h2>
+              <div className="bg-[#F8F9FC] p-4 rounded-xl mt-2 shadow-sm border border-gray-200 hover:bg-[#eef1fb]">
                 <h3 className="text-lg font-semibold text-[#27187E]">Dr. Michael Chen</h3>
                 <p className="text-gray-600">michael.chen@example.com</p>
                 <p className="text-gray-500">Department: Computer Science</p>
@@ -109,11 +105,14 @@ const Dashboard = () => {
   );
 };
 
-const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: boolean }) => (
-  <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
-    <Icon size={20} />
-    <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
-  </div>
+// 👉 Updated SidebarLink with routing support
+const SidebarLink = ({ Icon, text, href, isOpen }: { Icon: any; text: string; href: string; isOpen: boolean }) => (
+  <Link href={href} passHref legacyBehavior>
+    <a className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+      <Icon size={20} />
+      <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
+    </a>
+  </Link>
 );
 
 const StatCard = ({ title, value, icon }: { title: string; value: string; icon: JSX.Element }) => (
