@@ -30,7 +30,10 @@ const studentSchema = new mongoose.Schema(
                 ref:"course"
             }
         ],
-        role:"student"
+        role: {
+            type: String,
+            default: "student"
+        }
     },
     {
         timestamps:true
