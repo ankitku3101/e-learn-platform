@@ -11,7 +11,7 @@ import {
   LogOut,
   Home
 } from "lucide-react";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 
 type DashboardLayoutProps = {
