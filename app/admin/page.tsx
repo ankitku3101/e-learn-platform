@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { JSX, useState } from "react";
 import {
   FiMenu, FiUsers, FiBookOpen, FiBarChart2,
@@ -29,29 +30,42 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-[#F1F2F6]">
+    <div className="min-h-screen flex flex-col bg-[#F1F2F6]">
       {/* Header */}
-      <header className="bg-white shadow-md py-4 text-center text-xl font-bold">
-        <span className="text-[#27187E]">UNILEARN - Admin Panel</span>
+      <header className="bg-white shadow-md py-4 px-6 flex items-center justify-between h-16">
+        {/* Left Side: Logo + Unilearn */}
+        <div className="flex items-center gap-2">
+          <Image src="/Images/logo.png" alt="Logo" width={40} height={40} />
+          <span className="text-2xl font-bold text-[#27187E]">UNILEARN</span>
+        </div>
+        {/* Right Side: Admin Panel */}
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+            <span className="text-2xl font-bold text-[#27187E]">Admin Panel</span>
+        </div>
       </header>
 
+      {/* Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <div className={`${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-5 transition-all duration-300`}>
-          <div className="flex items-center justify-between">
-            <h1 className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-bold`}>Unilearn</h1>
-            <button onClick={() => setSidebarOpen(!isSidebarOpen)}>
+        <div className={`${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-[calc(100vh-64px)] flex flex-col p-5 transition-all duration-300`}>
+          {/* Toggle Button */}
+          <div className="flex justify-end mb-6">
+            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="text-white">
               <FiMenu size={24} />
             </button>
           </div>
-          <nav className="mt-10">
+
+          {/* Navigation */}
+          <nav className="flex-1">
             <SidebarLink Icon={FiUsers} text="User Management" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiBarChart2} text="Reports" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiClipboard} text="System Monitoring" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiVolume2} text="Announcements" isOpen={isSidebarOpen} />
           </nav>
-          <div className="mt-auto">
+
+          {/* Bottom */}
+          <div className="mt-auto border-t pt-4">
             <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
           </div>
         </div>
@@ -81,7 +95,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#1E1E2F] text-white text-center py-3">
+      <footer className="bg-[#1E1E2F] text-white text-center py-3 text-sm">
         © {new Date().getFullYear()} Unilearn. All rights reserved.
       </footer>
     </div>
