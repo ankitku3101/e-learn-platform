@@ -184,7 +184,7 @@ export default function FacultyDashboard() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">My Courses</h2>
             <button 
-              className="text-elearn-secondary hover:text-elearn-primary transition-colors"
+              className="text-[#758BFD] hover:text-elearn-primary transition-colors"
               onClick={() => router.push("/faculty/courses")}
             >
               View all
