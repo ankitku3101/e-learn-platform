@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import BackgroundGradient from "@/components/BackgroundGradient";
 import Link from "next/link";
 
+import { FiDownload } from "react-icons/fi";
+
+// Types
+
 type Student = {
   name: string;
   avgScore: number;
@@ -45,13 +49,35 @@ const ReportGeneration = () => {
     }, 500);
   }, []);
 
+  const handleDownload = () => {
+    const report = {
+      studentPerformance,
+      courseProgress,
+      facultyActivities,
+    };
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    element.href = URL.createObjectURL(file);
+    element.download = "unilearn_report.json";
+    document.body.appendChild(element);
+    element.click();
+  };
+
   return (
     <div className="relative">
       <Navbar />
       <div className="min-h-screen flex items-center justify-center text-black pt-16">
         <BackgroundGradient color1="#AEB8FE" color2="#758BFD" position="bottom" id={10} />
         <div className="w-full max-w-5xl bg-white p-8 rounded-lg shadow-lg mt-12">
-          <h2 className="text-2xl font-semibold text-center mb-6">Report Generation</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-center w-full">Report Generation</h2>
+            <button
+              onClick={handleDownload}
+              className="flex items-center gap-2 bg-[#27187E] text-white px-4 py-2 rounded-md hover:bg-[#FF8600] transition"
+            >
+              <FiDownload /> Download Report
+            </button>
+          </div>
 
           {loading ? (
             <p className="text-center">Loading reports...</p>
@@ -110,12 +136,12 @@ const Navbar = () => {
 const ReportSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-8">
     <h3 className="text-xl font-semibold text-[#27187E] mb-4">{title}</h3>
-    <div className="grid md:grid-cols-2 gap-4">{children}</div>
+    <div className="grid md:grid-cols-2 gap-6">{children}</div>
   </div>
 );
 
 const ReportCard = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-[#F1F2F6] p-5 rounded-lg shadow-md">
+  <div className="bg-[#F1F2F6] p-6 rounded-xl shadow-md transition-transform duration-300 transform hover:scale-[1.03] hover:shadow-xl">
     <h4 className="text-lg font-bold mb-2 text-[#27187E]">{title}</h4>
     <div className="text-sm text-gray-700">{children}</div>
   </div>
