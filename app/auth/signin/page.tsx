@@ -3,6 +3,7 @@
 import { signIn, getSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import BackgroundGradient from '@/components/BackgroundGradient';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -41,7 +42,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 text-black">
+    <div className="relative flex min-h-screen items-center justify-center text-black">
+      <BackgroundGradient color1="#AEB8FE" color2="#758BFD" position="bottom" id={3} />  
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg"
@@ -76,7 +78,7 @@ export default function SignIn() {
         </div>
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-500"
+          className="w-full py-2 px-4 bg-[#27187E]/70 text-white rounded hover:bg-[#27187E] disabled:bg-[#27187E]/50 cursor-pointer"
           disabled={loading} 
         >
           {loading ? (
