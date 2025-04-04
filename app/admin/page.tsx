@@ -108,7 +108,7 @@ const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: 
     <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
   </div>
 );
-
+  
 const StatCard = ({ title, value, icon }: { title: string; value: number; icon: JSX.Element }) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
     <div className="text-[#27187E]">{icon}</div>

@@ -1,12 +1,32 @@
 "use client";
+import { getSession } from "next-auth/react";
 import Image from "next/image";
-import { JSX, useState } from "react";
+import { useRouter } from "next/navigation";
+import { JSX, useEffect, useState } from "react";
 import { 
   FiMenu, FiBookOpen, FiClipboard, FiBarChart2, 
   FiUser, FiLogOut, FiEdit, FiVideo 
 } from "react-icons/fi";
 
 const StudentDashboard = () => {
+
+  const router = useRouter();
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const validateSession = async () => {
+      const session = await getSession();
+      if (!session || session?.user?.role !== "student") {
+        router.push("/auth/signin");
+      } else {
+        setFirstName(session?.user?.name || "Student");
+      }
+      setLoading(false);
+    };
+    validateSession();
+  }, [router]);
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const courses = [
@@ -44,7 +64,7 @@ const StudentDashboard = () => {
           </div>
           
           <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiBookOpen} text="View All Courses" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
@@ -62,10 +82,7 @@ const StudentDashboard = () => {
             <div>
               <h2 className="text-2xl font-bold text-[#27187E] text-center sm:text-left">Student Dashboard</h2>
               <div className="bg-[#F8F9FC] p-4 rounded-lg mt-4 shadow-sm">
-                <h3 className="text-lg font-semibold text-[#27187E]">Alex Johnson</h3>
-                <p className="text-gray-600">alex.johnson@example.com</p>
-                <p className="text-gray-500">Department: Computer Science</p>
-                <p className="text-gray-500">Student ID: STU12345</p>
+                <h3 className="text-lg font-semibold text-[#27187E]">Welcome {firstName}</h3>
               </div>
             </div>
             <button className="bg-[#758BFD] text-white px-4 py-2 mt-4 sm:mt-0 rounded-lg flex items-center gap-2 hover:bg-[#5a6dfd] transition">
