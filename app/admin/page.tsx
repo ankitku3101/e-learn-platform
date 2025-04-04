@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link"; // Link import kiya
 import { JSX, useState } from "react";
 import {
   FiMenu, FiUsers, FiBookOpen, FiBarChart2,
@@ -38,9 +39,9 @@ const AdminDashboard = () => {
           <Image src="/Images/logo.png" alt="Logo" width={40} height={40} />
           <span className="text-2xl font-bold text-[#27187E]">UNILEARN</span>
         </div>
-        {/* Right Side: Admin Panel */}
+        {/* Center: Admin Panel */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
-            <span className="text-2xl font-bold text-[#27187E]">Admin Panel</span>
+          <span className="text-2xl font-bold text-[#27187E]">Admin Panel</span>
         </div>
       </header>
 
@@ -57,9 +58,9 @@ const AdminDashboard = () => {
 
           {/* Navigation */}
           <nav className="flex-1">
-            <SidebarLink Icon={FiUsers} text="User Management" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiBarChart2} text="Reports" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUsers} text="User Management" isOpen={isSidebarOpen} href="/admin/create-user" />
+            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} href="" />
+            <SidebarLink Icon={FiBarChart2} text="Reports" isOpen={isSidebarOpen} href="/admin/report-generation"/>
             <SidebarLink Icon={FiClipboard} text="System Monitoring" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiVolume2} text="Announcements" isOpen={isSidebarOpen} />
           </nav>
@@ -102,13 +103,27 @@ const AdminDashboard = () => {
   );
 };
 
-const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: boolean }) => (
-  <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
-    <Icon size={20} />
-    <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
-  </div>
+// Sidebar Link Component with Link
+const SidebarLink = ({
+  Icon,
+  text,
+  isOpen,
+  href = "#",
+}: {
+  Icon: any;
+  text: string;
+  isOpen: boolean;
+  href?: string;
+}) => (
+  <Link href={href}>
+    <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+      <Icon size={20} />
+      <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
+    </div>
+  </Link>
 );
 
+// Stat Card Component
 const StatCard = ({ title, value, icon }: { title: string; value: number; icon: JSX.Element }) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
     <div className="text-[#27187E]">{icon}</div>
