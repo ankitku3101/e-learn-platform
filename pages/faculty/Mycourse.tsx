@@ -1,68 +1,135 @@
 "use client";
 
 import { useState } from "react";
-import { FiBookOpen, FiUsers, FiBarChart2, FiEdit2 } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 const MyCourses = () => {
-  const [courses, setCourses] = useState([
-    {
-      title: "Data Structures and Algorithms",
-      code: "CSE201",
-      enrolled: 56,
-      performance: "82%",
-      color: "bg-[#758BFD]",
-    },
-    {
-      title: "Advanced Database Systems",
-      code: "CSE402",
-      enrolled: 42,
-      performance: "75%",
-      color: "bg-[#AEB8FE]",
-    },
-    {
-      title: "Machine Learning Fundamentals",
-      code: "CSE317",
-      enrolled: 63,
-      performance: "88%",
-      color: "bg-[#27187E]",
-    },
-    {
-      title: "Cloud Computing",
-      code: "CSE455",
-      enrolled: 38,
-      performance: "69%",
-      color: "bg-[#FF8600]",
-    },
-  ]);
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    id: "",
+    coursename: "",
+    description: "",
+    duration: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/v1/course/create-course", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Something went wrong");
+
+      router.push("/Dashboard");
+    } catch (err: any) {
+      setErrorMsg(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen p-8 bg-[#F1F2F6]">
-      <h2 className="text-3xl font-bold text-[#27187E] mb-6">My Courses</h2>
+    <div className="min-h-screen bg-[#F5F5F5] py-10 px-6 text-black">
+      <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-gray-200">
+        <h2 className="text-3xl font-bold text-[#27187E] mb-6 text-center">
+          Create New Course
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {courses.map((course, index) => (
-          <div
-            key={index}
-            className={`${course.color} text-white p-5 rounded-2xl shadow-md hover:shadow-xl transition-all cursor-pointer`}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-lg font-semibold leading-snug">{course.title}</h3>
-                <p className="text-sm text-white/80">{course.code}</p>
-              </div>
-              <FiEdit2 className="text-white hover:text-white/80 cursor-pointer" />
-            </div>
-
-            <div className="mt-6 space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <FiUsers size={16} /> Enrolled Students: {course.enrolled}
-              </div>
-              <div className="flex items-center gap-2">
-                <FiBarChart2 size={16} /> Avg. Performance: {course.performance}
-              </div>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Faculty ID */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Faculty ID <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="id"
+              placeholder="Enter your Faculty ID"
+              value={formData.id}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
+            />
           </div>
-        ))}
+
+          {/* Course Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Course Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="coursename"
+              placeholder="Enter course title (e.g., Data Structures)"
+              value={formData.coursename}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="description"
+              placeholder="Describe the course briefly"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows={4}
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
+            />
+          </div>
+
+          {/* Duration */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Duration <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="duration"
+              placeholder="e.g., 10 weeks, 2 months"
+              value={formData.duration}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
+            />
+          </div>
+
+          {/* Error & Button */}
+          {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#758BFD] text-white py-3 rounded-md font-semibold hover:bg-[#5c6bdf] transition"
+          >
+            {loading ? "Creating Course..." : "Create Course"}
+          </button>
+        </form>
       </div>
     </div>
   );
