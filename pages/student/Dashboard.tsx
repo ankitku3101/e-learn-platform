@@ -1,197 +1,107 @@
-"use client"
-import React from "react";
-import DashboardLayout from "@/components/DashboardLayout";
-import ProfileCard from "@/components/ProfileCard";
-import CourseCard from "@/components/CourseCards";
-import QuizCard from "@/components/QuizCard";
-import StatCard from "@/components/StatCard";
-import PerformanceChart from "@/components/PerformanceChart";
-import { BookOpen, Award, Clock, BookCheck } from "lucide-react";
-import { useRouter } from "next/navigation";
+"use client";
+import { JSX, useState } from "react";
+import { 
+  FiMenu, FiBookOpen, FiClipboard, FiBarChart2, 
+  FiUser, FiLogOut, FiEdit, FiVideo 
+} from "react-icons/fi";
 
-// Mock data
-const studentData = {
-  name: "Alex Johnson",
-  email: "alex.johnson@example.com",
-  studentId: "STU12345",
-  department: "Computer Science"
-};
+const StudentDashboard = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-const coursesData = [
-  {
-    id: 1,
-    title: "Introduction to Web Development",
-    instructor: "Dr. Sarah Parker",
-    progress: 75,
-    bgColor: "bg-elearn-tertiary"
-  },
-  {
-    id: 2,
-    title: "Data Structures and Algorithms",
-    instructor: "Prof. Michael Chen",
-    progress: 45,
-    bgColor: "bg-elearn-secondary"
-  },
-  {
-    id: 3,
-    title: "Machine Learning Fundamentals",
-    instructor: "Dr. Emily Rodriguez",
-    progress: 20,
-    bgColor: "bg-elearn-primary"
-  },
-  {
-    id: 4,
-    title: "UI/UX Design Principles",
-    instructor: "Sarah Thompson",
-    progress: 0,
-    upcoming: true,
-    bgColor: "bg-elearn-accent"
-  },
-];
-
-const quizzesData = [
-  {
-    id: 1,
-    title: "JavaScript Fundamentals",
-    courseName: "Introduction to Web Development",
-    date: "April 10, 2025",
-    questions: 15,
-    duration: "45 min",
-    status: "upcoming" as const
-  },
-  {
-    id: 2,
-    title: "CSS Layouts Quiz",
-    courseName: "Introduction to Web Development",
-    date: "April 3, 2025",
-    questions: 10,
-    duration: "30 min",
-    score: 85,
-    status: "completed" as const
-  },
-  {
-    id: 3,
-    title: "Binary Trees",
-    courseName: "Data Structures and Algorithms",
-    date: "April 1, 2025",
-    questions: 12,
-    duration: "40 min",
-    score: 78,
-    status: "completed" as const
-  }
-];
-
-const performanceData = [
-  { name: "Assignment 1", score: 85, average: 75 },
-  { name: "Quiz 1", score: 78, average: 70 },
-  { name: "Midterm", score: 82, average: 68 },
-  { name: "Assignment 2", score: 90, average: 72 },
-  { name: "Quiz 2", score: 88, average: 75 },
-];
-
-export default function StudentDashboard() {
-  const router = useRouter();
+  const courses = [
+    { title: "Data Structures", color: "bg-[#758BFD]" },
+    { title: "Database Systems", color: "bg-[#AEB8FE]" },
+    { title: "Machine Learning", color: "bg-[#27187E]" },
+    { title: "Web Development", color: "bg-[#FF8600]" },
+  ];
 
   return (
-    <DashboardLayout userType="student">
-      <div className="space-y-6">
-        <h1 className="text-2xl font-bold mb-6">Student Dashboard</h1>
-        
-        <ProfileCard 
-          userType="student"
-          name={studentData.name}
-          email={studentData.email}
-          studentId={studentData.studentId}
-          department={studentData.department}
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard 
-            title="Enrolled Courses" 
-            value={3} 
-            icon={BookOpen} 
-          />
-          <StatCard 
-            title="Overall GPA" 
-            value="3.75" 
-            icon={Award}
-            trend={{ value: 5, isPositive: true }}
-          />
-          <StatCard 
-            title="Hours Spent" 
-            value="42" 
-            icon={Clock}
-            trend={{ value: 12, isPositive: true }}
-          />
-          <StatCard 
-            title="Completed Courses" 
-            value={2} 
-            icon={BookCheck}
-          />
+    <div className="flex flex-col h-screen bg-[#F1F2F6]">
+      {/* Header */}
+      <header className="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+        <span className="text-[#27187E] text-2xl font-bold">UNILEARN</span>
+        <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="lg:hidden">
+          <FiMenu size={24} />
+        </button>
+      </header>
+
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <div className={`${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-5 transition-all duration-300`}>
+          <h1 className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-bold`}>Unilearn</h1>
+          <nav className="mt-10 space-y-4">
+            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiVideo} text="Attend Live Lectures" isOpen={isSidebarOpen} /> {/* ✅ Added Live Lectures */}
+          </nav>
+          <div className="mt-auto">
+            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
+          </div>
         </div>
-        
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">My Courses</h2>
-            <button 
-              className="text-elearn-secondary hover:text-elearn-primary transition-colors"
-              onClick={() => router.push("/student/courses")}
-            >
-              View all
+
+        {/* Main Content */}
+        <div className="flex-1 p-8">
+          {/* Student Info Card */}
+          <div className="bg-white p-5 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-[#27187E]">Student Dashboard</h2>
+              <div className="bg-[#F8F9FC] p-4 rounded-lg mt-4 shadow-sm">
+                <h3 className="text-lg font-bold text-[#27187E]">Alex Johnson</h3>
+                <p className="text-gray-600">alex.johnson@example.com</p>
+                <p className="text-gray-500">Department: Computer Science</p>
+                <p className="text-gray-500">Student ID: STU12345</p>
+              </div>
+            </div>
+            <button className="bg-[#758BFD] text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <FiEdit /> Edit Profile
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {coursesData.slice(0, 4).map((course) => (
-              <CourseCard 
-                key={course.id}
-                title={course.title}
-                instructor={course.instructor}
-                progress={course.progress}
-                bgColor={course.bgColor}
-                upcoming={course.upcoming}
-                onClick={() => router.push(`/student/courses/${course.id}`)}
-              />
+
+          {/* Stats Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <StatCard title="Enrolled Courses" value="3" icon={<FiBookOpen size={30} />} />
+            <StatCard title="Overall GPA" value="3.75" icon={<FiBarChart2 size={30} />} />
+            <StatCard title="Hours Spent" value="42" icon={<FiClipboard size={30} />} />
+            <StatCard title="Completed Courses" value="2" icon={<FiBookOpen size={30} />} />
+          </div>
+
+          {/* Courses Section */}
+          <h3 className="mt-6 text-xl font-bold text-[#27187E]">My Courses</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+            {courses.map((course, index) => (
+              <div key={index} className={`${course.color} text-white p-6 h-40 rounded-lg shadow-lg flex items-center justify-center hover:scale-105 transition-transform cursor-pointer`}>
+                <h4 className="text-lg font-bold text-center">{course.title}</h4>
+              </div>
             ))}
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Upcoming Quizzes</h2>
-              <button 
-                className="text-elearn-secondary hover:text-elearn-primary transition-colors"
-                onClick={() => router.push("/student/quizzes")}
-              >
-                View all
-              </button>
-            </div>
-            <div className="space-y-4">
-              {quizzesData.slice(0, 3).map((quiz) => (
-                <QuizCard 
-                  key={quiz.id}
-                  title={quiz.title}
-                  courseName={quiz.courseName}
-                  date={quiz.date}
-                  questions={quiz.questions}
-                  duration={quiz.duration}
-                  score={quiz.score}
-                  status={quiz.status}
-                  onClick={() => router.push(`/student/quizzes/${quiz.id}`)}
-                />
-              ))}
-            </div>
-          </div>
-          
-          <div>
-            <h2 className="text-xl font-bold mb-4">Performance Overview</h2>
-            <PerformanceChart 
-              data={performanceData}
-              title="Recent Performance"
-            />
-          </div>
-        </div>
       </div>
-    </DashboardLayout>
+
+      {/* Footer */}
+      <footer className="bg-[#1E1E2F] text-white text-center py-3 text-sm">
+        © {new Date().getFullYear()} Unilearn. All rights reserved.
+      </footer>
+    </div>
   );
-}
+};
+
+const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: boolean }) => (
+  <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+    <Icon size={20} />
+    <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
+  </div>
+);
+
+const StatCard = ({ title, value, icon }: { title: string; value: string; icon: JSX.Element }) => (
+  <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
+    <div className="text-[#27187E]">{icon}</div>
+    <div>
+      <h4 className="text-sm text-gray-500">{title}</h4>
+      <p className="text-xl font-bold text-[#27187E]">{value}</p>
+    </div>
+  </div>
+);
+
+export default StudentDashboard;
