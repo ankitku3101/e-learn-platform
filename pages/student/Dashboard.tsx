@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { JSX, useState } from "react";
-import { 
-  FiMenu, FiBookOpen, FiClipboard, FiBarChart2, 
-  FiUser, FiLogOut, FiEdit, FiVideo 
+import {
+  FiMenu, FiBookOpen, FiClipboard, FiBarChart2,
+  FiUser, FiLogOut, FiEdit, FiVideo
 } from "react-icons/fi";
 
 const StudentDashboard = () => {
@@ -32,7 +33,6 @@ const StudentDashboard = () => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <div className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-4 transition-all duration-300 flex flex-col`}>
-          {/* Sidebar Toggle - repositioned to top-right */}
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
             className="absolute top-4 right-4 text-white hover:text-gray-300"
@@ -40,18 +40,15 @@ const StudentDashboard = () => {
             <FiMenu size={24} />
           </button>
 
-          <div className="flex items-center justify-center mb-6 mt-6">  
-          </div>
-          
-          <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiVideo} text="Live Classes" isOpen={isSidebarOpen} />
+          <nav className="space-y-3 mt-12">
+            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} href="/student/dashboard" />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quizzes" />
+            <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} href="/student/performance" />
+            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/student/profile" />
+            <SidebarLink Icon={FiVideo} text="Live Classes" isOpen={isSidebarOpen} href="/student/live-classes" />
           </nav>
           <div className="mt-auto border-t pt-4">
-            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} href="/logout" />
           </div>
         </div>
 
@@ -101,14 +98,36 @@ const StudentDashboard = () => {
   );
 };
 
-const SidebarLink = ({ Icon, text, isOpen }: { Icon: any; text: string; isOpen: boolean }) => (
-  <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
-    <Icon size={20} />
-    <span className={`${isOpen ? "block" : "hidden"} text-sm font-medium`}>{text}</span>
-  </div>
+// Sidebar Link with navigation
+const SidebarLink = ({
+  Icon,
+  text,
+  isOpen,
+  href
+}: {
+  Icon: any;
+  text: string;
+  isOpen: boolean;
+  href: string;
+}) => (
+  <Link href={href}>
+    <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+      <Icon size={20} />
+      <span className={`${isOpen ? "block" : "hidden"} text-sm font-medium`}>{text}</span>
+    </div>
+  </Link>
 );
 
-const StatCard = ({ title, value, icon }: { title: string; value: string; icon: JSX.Element }) => (
+// Stat Card Component
+const StatCard = ({
+  title,
+  value,
+  icon
+}: {
+  title: string;
+  value: string;
+  icon: JSX.Element;
+}) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition">
     <div className="text-[#27187E]">{icon}</div>
     <div>
