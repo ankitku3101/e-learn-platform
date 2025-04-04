@@ -24,6 +24,10 @@ const courseSchema = new mongoose.Schema(
                 message:"Description must be less than 300 words."
             }
         },
+        coverimage:{
+            type:String,
+            trim:true
+        },
         modules:[
             {
                 type:mongoose.Schema.Types.ObjectId,
@@ -31,7 +35,8 @@ const courseSchema = new mongoose.Schema(
             }
         ],
         duration:{
-            type:Number
+            type:Number,
+            default:0
         },
         feedback:[
             {
