@@ -15,10 +15,10 @@ export async function PATCH(request:NextRequest,{params}:Params) {
         //courseId
         const {id} = await params;
         const session = await getServerSession(authOptions);
-        // const userId = session?.user.id;
-        const requestBody = await request.json();
-        const {my_id} = requestBody;
-        const userId = my_id;
+        const userId = session?.user.id;
+        // const requestBody = await request.json();
+        // const {my_id} = requestBody;
+        // const userId = my_id;
 
         if(!id || !mongoose.Types.ObjectId.isValid(id)){
             return NextResponse.json({message:"Id not provided or valid"},{status:400})
