@@ -9,7 +9,7 @@ interface Params {
 
 export async function GET(request:NextRequest,{params} : Params){
     try {
-        const {id} = params;
+        const {id} = await params;
 
         if(!id || !mongoose.Types.ObjectId.isValid(id)){
             return NextResponse.json({message:"id is not valid or provided"},{status:400});
