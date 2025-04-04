@@ -59,10 +59,10 @@ const AdminDashboard = () => {
           {/* Navigation */}
           <nav className="flex-1">
             <SidebarLink Icon={FiUsers} text="User Management" isOpen={isSidebarOpen} href="/admin/create-user" />
-            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} href="" />
+            <SidebarLink Icon={FiBookOpen} text="Course Management" isOpen={isSidebarOpen} href="admin/courses" />
             <SidebarLink Icon={FiBarChart2} text="Reports" isOpen={isSidebarOpen} href="/admin/report-generation"/>
-            <SidebarLink Icon={FiClipboard} text="System Monitoring" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiVolume2} text="Announcements" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiClipboard} text="System Monitoring" isOpen={isSidebarOpen} href="/admin/system-monitoring" />
+            <SidebarLink Icon={FiVolume2} text="Announcements" isOpen={isSidebarOpen} href="/admin/announcements"/>
           </nav>
 
           {/* Bottom */}
@@ -124,6 +124,7 @@ const SidebarLink = ({
 );
 
 // Stat Card Component
+  
 const StatCard = ({ title, value, icon }: { title: string; value: number; icon: JSX.Element }) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
     <div className="text-[#27187E]">{icon}</div>

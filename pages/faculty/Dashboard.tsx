@@ -1,14 +1,34 @@
 "use client";
 import Image from "next/image";
-import { useState, JSX } from "react";
+import Link from "next/link"; // ← IMPORT LINK
+import { JSX, useEffect, useState } from "react";
 import {
   FiMenu, FiBookOpen, FiUsers, FiClipboard,
   FiBarChart2, FiUser, FiLogOut, FiEdit
 } from "react-icons/fi";
 import { BsPencilSquare } from "react-icons/bs";
-import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
 
 const Dashboard = () => {
+
+  const router = useRouter();
+    const [firstName, setFirstName] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const validateSession = async () => {
+        const session = await getSession();
+        if (!session || session?.user?.role !== "faculty") {
+          router.push("/auth/signin");
+        } else {
+          setFirstName(session?.user?.name || "faculty");
+        }
+        setLoading(false);
+      };
+      validateSession();
+    }, [router]);
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const courses = [
@@ -54,7 +74,7 @@ const Dashboard = () => {
           </nav>
 
           <div className="mt-auto border-t pt-4">
-            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} href="/logout" />
+            <SidebarLink Icon={FiLogOut} text="Logout" href="/" isOpen={isSidebarOpen} />
           </div>
         </div>
 
@@ -63,12 +83,9 @@ const Dashboard = () => {
           {/* Faculty Info Card */}
           <div className="bg-white p-6 rounded-2xl shadow-md flex items-center justify-between hover:shadow-xl transition-all duration-300 border border-gray-100">
             <div>
-              <h2 className="text-2xl font-bold text-[#27187E] text-center sm:text-left">Faculty Dashboard</h2>
-              <div className="bg-[#F8F9FC] p-4 rounded-xl mt-2 shadow-sm border border-gray-200 transition hover:bg-[#eef1fb]">
-                <h3 className="text-lg font-semibold text-[#27187E]">Dr. Michael Chen</h3>
-                <p className="text-gray-600">michael.chen@example.com</p>
-                <p className="text-gray-500">Department: Computer Science</p>
-                <p className="text-gray-500">Faculty ID: FAC54321</p>
+              <h2 className="text-2xl font-bold text-[#27187E]">Faculty Dashboard</h2>
+              <div className="bg-[#F8F9FC] p-4 rounded-xl mt-2 shadow-sm border border-gray-200 hover:bg-[#eef1fb]">
+                <h3 className="text-lg font-semibold text-[#27187E]">Welcome, {firstName}</h3>
               </div>
             </div>
             <button className="bg-[#758BFD] text-white px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-md hover:bg-[#5c6bdf] transition-all">
