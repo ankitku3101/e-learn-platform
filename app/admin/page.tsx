@@ -124,6 +124,7 @@ const SidebarLink = ({
 );
 
 // Stat Card Component
+  
 const StatCard = ({ title, value, icon }: { title: string; value: number; icon: JSX.Element }) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4">
     <div className="text-[#27187E]">{icon}</div>
