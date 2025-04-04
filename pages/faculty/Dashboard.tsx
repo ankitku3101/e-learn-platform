@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { JSX, useState } from "react";
 import {
   FiMenu, FiBookOpen, FiUsers, FiClipboard,
@@ -18,16 +19,32 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[#F1F2F6] font-sans">
+      <header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Image src="/Images/logo.png" alt="Unilearn Logo" width={40} height={40} />
+          <span className="text-[#27187E] text-2xl font-extrabold tracking-wide">UNILEARN</span>
+        </div>
+        <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="lg:hidden">
+          <FiMenu size={24} />
+        </button>
+      </header>
+
       <div className="flex flex-1">
         {/* Sidebar */}
-        <div className={`${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-5 transition-all duration-300`}>
-          <div className="flex items-center justify-between mb-10">
-            <div className={`${isSidebarOpen ? "block" : "hidden"}`} />
-            <button onClick={() => setSidebarOpen(!isSidebarOpen)}>
-              <FiMenu size={24} />
-            </button>
+        <div className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-4 transition-all duration-300 flex flex-col`}>
+          {/* Sidebar Toggle - repositioned to top-right */}
+          <button
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300"
+          >
+            <FiMenu size={24} />
+          </button>
+
+          <div className="flex items-center justify-center mb-6 mt-6">  
           </div>
-          <nav className="mt-10">
+
+          {/* Navigation */}
+          <nav className="space-y-3">
             <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} />
             <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} />
@@ -35,7 +52,7 @@ const Dashboard = () => {
             <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} />
           </nav>
-          <div className="mt-auto">
+          <div className="mt-auto border-t pt-4">
             <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} />
           </div>
         </div>
@@ -43,14 +60,12 @@ const Dashboard = () => {
         {/* Main Content */}
         <div className="flex-1 p-8">
           {/* Brand Title */}
-          <h1 className="text-4xl font-semibold text-[#27187E] mb-2 tracking-tight leading-tight">
-            UNILEARN
-          </h1>
+          
 
           {/* Faculty Info Card */}
           <div className="bg-white p-6 rounded-2xl shadow-md flex items-center justify-between hover:shadow-xl transition-all duration-300 border border-gray-100">
             <div>
-              <h2 className="text-2xl font-semibold text-[#27187E] mb-2">Faculty Dashboard</h2>
+              <h2 className="text-2xl font-bold text-[#27187E] text-center sm:text-left">Faculty Dashboard</h2>
               <div className="bg-[#F8F9FC] p-4 rounded-xl mt-2 shadow-sm border border-gray-200 transition hover:bg-[#eef1fb]">
                 <h3 className="text-lg font-semibold text-[#27187E]">Dr. Michael Chen</h3>
                 <p className="text-gray-600">michael.chen@example.com</p>
