@@ -61,14 +61,14 @@ const StudentDashboard = () => {
           </button>
 
           <nav className="space-y-3 mt-12">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} href="/student/dashboard" />
+            <SidebarLink Icon={FiBookOpen} text="View All Courses" isOpen={isSidebarOpen} href="/student/view-all-courses" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quizzes" />
             <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} href="/student/performance" />
             <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/student/profile" />
             <SidebarLink Icon={FiVideo} text="Live Classes" isOpen={isSidebarOpen} href="/student/live-classes" />
           </nav>
           <div className="mt-auto border-t pt-4">
-            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} href="/logout" />
+            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} href="/" />
           </div>
         </div>
 
