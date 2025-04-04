@@ -4,7 +4,7 @@ const assignmentSchema = new mongoose.Schema(
     {
         belongsto:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:"course"
+            ref:"module"
         },
         doc:{
             type:String,

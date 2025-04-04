@@ -4,7 +4,7 @@ const videolessonSchema = new mongoose.Schema(
     {
         belongsto:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:"course"
+            ref:"module"
         },
         name:{
             type:String,

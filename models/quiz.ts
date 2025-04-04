@@ -4,7 +4,7 @@ const quizSchema = new mongoose.Schema(
     {
         belongsto:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:"course"
+            ref:"module"
         },
         questions:[
             {
