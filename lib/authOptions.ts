@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const studentSchema = new mongoose.Schema(
+const facultySchema = new mongoose.Schema(
     {
         name:{
             type:String,
@@ -24,17 +24,14 @@ const studentSchema = new mongoose.Schema(
             type:String,
             required:[true,"Password is mandatory."],
         },
-        enrolledincourse:[
-            {
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"course"
-            }
-        ],
-        role:"student"
+        createdCourses:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"course"
+        }
     },
     {
         timestamps:true
     }
 )
 
-export default mongoose.models.student || mongoose.model("student",studentSchema);
+export default mongoose.models.faculty || mongoose.model("faculty",facultySchema);

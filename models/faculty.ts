@@ -27,7 +27,8 @@ const facultySchema = new mongoose.Schema(
         createdCourses:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"course"
-        }
+        },
+        role:"faculty"
     },
     {
         timestamps:true
