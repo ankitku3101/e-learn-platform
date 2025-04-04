@@ -1,6 +1,6 @@
 import React from "react";
 import { Clock, CheckCircle2, FileText } from "lucide-react";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/lib/utils";
 
 type QuizStatus = "upcoming" | "completed" | "missed";
 
