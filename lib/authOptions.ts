@@ -1,37 +1,71 @@
-import mongoose from "mongoose";
+import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from 'bcryptjs'
+import Student from "@/models/student";
+import Faculty from "@/models/faculty"; 
+import dbConnect from "@/lib/mongodb";
 
-const facultySchema = new mongoose.Schema(
-    {
-        name:{
-            type:String,
-            trim:true,
-            required:[true,"Name is mandatory."],
-        },
-        username:{
-            type:String,
-            required:[true,"Username is mandatory."],
-            trim:true,
-            lowercase:true,
-            unique:true
-        },
-        email:{
-            type:String,
-            required:[true,"Email is mandatory."],
-            lowercase:true,
-            trim:true,
-        },
-        password:{
-            type:String,
-            required:[true,"Password is mandatory."],
-        },
-        createdCourses:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"course"
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Email", type: "text", placeholder: "Enter your email" },
+        password: { label: "Password", type: "password", placeholder: "Enter your password" },
+      },
+      async authorize(credentials: any) {
+        try {
+          const { username: email, password } = credentials;
+
+          if (!email || !password) {
+            throw new Error("Email and password are required");
+          }
+
+          await dbConnect();
+
+          let user = await Student.findOne({ email }) || await Faculty.findOne({ email });
+
+          if (!user) {
+            throw new Error("Invalid email or password");
+          }
+
+          const isPasswordValid = await bcrypt.compare(password, user.password);
+
+          if (!isPasswordValid) {
+            throw new Error("Invalid email or password");
+          }
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role, 
+          };
+        } catch (error: any) {
+          console.error("Authorization error:", error.message);
+          return null;
         }
+      },
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/signin",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id as string;
+        token.role = user.role as string;
+      }
+      return token;
     },
-    {
-        timestamps:true
-    }
-)
-
-export default mongoose.models.faculty || mongoose.model("faculty",facultySchema);
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+      }
+      return session;
+    },
+  },
+};
