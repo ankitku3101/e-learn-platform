@@ -69,7 +69,6 @@ const Dashboard = () => {
             <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/student-performance" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/faculty/quizzes" />
             <SidebarLink Icon={FiBarChart2} text="Notification & Remainders" isOpen={isSidebarOpen} href="/faculty/Notifications" />
-            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/faculty/profile" />
           </nav>
 
           <div className="mt-auto border-t pt-4">
