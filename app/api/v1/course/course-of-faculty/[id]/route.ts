@@ -2,14 +2,15 @@ import course from "@/models/course";
 import dbConnect from "@/lib/mongodb";
 import { type NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import type { RouteHandler } from "@/types/router-handler"
 
-// ✅ Import the correct type for the context
-
-// 👇 FIX: Use the correct context signature
-export const GET: RouteHandler<{ id: string }> = async (request, { params }) => {
+type RouteHandlerContext = {
+  params: {
+    id: string
+  }
+}
+export async function GET(request: Request, context: RouteHandlerContext) {
   try {
-    const id = params.id;
+    const id = context.params.id;
 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
