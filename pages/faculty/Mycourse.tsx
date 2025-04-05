@@ -1,134 +1,121 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const MyCourses = () => {
+  const { data: session } = useSession();
   const router = useRouter();
+
   const [formData, setFormData] = useState({
-    id: "",
-    coursename: "",
-    description: "",
-    duration: "",
+    coursename: '',
+    description: '',
+    duration: ''
   });
 
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState('');
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
+    setError('');
 
     try {
-      const res = await fetch("/api/v1/course/create-course", {
-        method: "POST",
+      const response = await fetch('/api/create-course', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          id: session?.user?.id,
+          ...formData,
+        }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Something went wrong");
+      const data = await response.json();
 
-      router.push("/Dashboard");
-    } catch (err: any) {
-      setErrorMsg(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+      if (response.ok) {
+        console.log('Course created:', data);
+        router.push('/faculty/dashboard'); // ✅ Redirect to dashboard
+      } else {
+        setError(data.message || 'Failed to create course');
+      }
+    } catch (err) {
+      setError('Something went wrong');
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] py-10 px-6 text-black">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-gray-200">
-        <h2 className="text-3xl font-bold text-[#27187E] mb-6 text-center">
-          Create New Course
-        </h2>
+    <div className="min-h-screen bg-[#f1f2f6] p-6 flex flex-col items-center justify-center">
+      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-xl">
+        <h2 className="text-2xl font-bold text-center text-[#27187E] mb-6">Create New Course</h2>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Faculty ID */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Faculty ID <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="id"
-              placeholder="Enter your Faculty ID"
-              value={formData.id}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
-            />
-          </div>
-
-          {/* Course Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Course Name <span className="text-red-500">*</span>
-            </label>
+            <label className="block mb-1 font-medium text-black">Course Name</label>
             <input
               type="text"
               name="coursename"
-              placeholder="Enter course title (e.g., Data Structures)"
+              placeholder="Enter course name"
+              className="w-full p-3 border rounded-lg text-black"
               value={formData.coursename}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
             />
           </div>
 
-          {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description <span className="text-red-500">*</span>
-            </label>
+            <label className="block mb-1 font-medium text-black">Description</label>
             <textarea
               name="description"
-              placeholder="Describe the course briefly"
+              placeholder="Enter course description"
+              className="w-full p-3 border rounded-lg text-black"
               value={formData.description}
               onChange={handleChange}
               required
               rows={4}
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
             />
           </div>
 
-          {/* Duration */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Duration <span className="text-red-500">*</span>
-            </label>
+            <label className="block mb-1 font-medium text-black">Duration</label>
             <input
               type="text"
               name="duration"
-              placeholder="e.g., 10 weeks, 2 months"
+              placeholder="e.g. 4 weeks / 20 hours"
+              className="w-full p-3 border rounded-lg text-black"
               value={formData.duration}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#758BFD]"
             />
           </div>
 
-          {/* Error & Button */}
-          {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#758BFD] text-white py-3 rounded-md font-semibold hover:bg-[#5c6bdf] transition"
-          >
-            {loading ? "Creating Course..." : "Create Course"}
-          </button>
+          <div className="flex justify-between mt-6">
+            <button
+              type="button"
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg"
+              onClick={() => router.push('/faculty/dashboard')}
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className="bg-[#27187E] hover:bg-[#1a1259] text-white px-6 py-2 rounded-lg"
+              disabled={loading}
+            >
+              {loading ? 'Creating...' : 'Create Course'}
+            </button>
+          </div>
         </form>
       </div>
     </div>
