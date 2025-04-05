@@ -1,6 +1,6 @@
 import course from "@/models/course";
 import dbConnect from "@/lib/mongodb";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
 // ✅ Import the correct type for the context
