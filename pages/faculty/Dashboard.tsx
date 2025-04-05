@@ -64,10 +64,9 @@ const Dashboard = () => {
 
           {/* Navigation with links */}
           <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" href="/dashboard" isOpen={isSidebarOpen} />
             <SidebarLink Icon={BsPencilSquare} text="My Courses" href="/courses" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUsers} text="Students" href="/students" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiClipboard} text="Quizzes" href="/quizzes" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiUsers} text="Students" href="/faculty/student-performance" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={FiClipboard} text="Quizzes & Assignment" href="/quizzes" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiBarChart2} text="Analytics" href="/analytics" isOpen={isSidebarOpen} />
             <SidebarLink Icon={FiUser} text="Profile" href="/profile" isOpen={isSidebarOpen} />
           </nav>
