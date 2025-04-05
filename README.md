@@ -8,6 +8,11 @@
 
 **🔗 [Visit Unilearn](https://unilearn-one.vercel.app)**
 
+credeentials for student - ankit123@gmail.com (username) /pw - ankit123
+credentials for faculty - syed123@gmail.com (username) /pw - syed123
+
+you can create your own credentials by visting - /admin/create-user
+
 ---
 
 ## 🎯 Key Objectives
