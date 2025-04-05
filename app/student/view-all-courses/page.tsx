@@ -15,7 +15,7 @@ export default function CoursesPage() {
   const [courses, setCourses] = useState<CourseType[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const limit = 6; // Number of courses per page
+  const limit = 6; 
   const [totalCourses, setTotalCourses] = useState(0);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function CoursesPage() {
     <div className='relative'>
         <Navbar />  
         <div className="min-h-screen flex items-center justify-center text-black">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto mt-24">
             <h1 className="text-3xl font-bold text-[#27187E] mb-6">Available Courses</h1>
 
             {loading ? (
