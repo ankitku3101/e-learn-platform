@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 
 interface Params{
-    params:{id:string}
+    params: Promise<{ id: string }>;
 }
 
 export async function PATCH(request:NextRequest,{params}:Params) {
