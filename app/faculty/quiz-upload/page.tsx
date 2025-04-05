@@ -12,7 +12,7 @@ const Navbar = () => {
       </div>
       <Link href="/faculty">
         <button className="cursor-pointer w-24 transform rounded-lg bg-[#27187E] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FF8600] md:w-auto dark:bg-white dark:text-black dark:hover:bg-gray-200">
-          Dashboard
+          Go Back
         </button>
       </Link>
     </nav>
@@ -68,7 +68,7 @@ const FacultyUpload = () => {
 
           <form onSubmit={handleUpload}>
             <div className="mb-4">
-              <label className="block font-medium mb-1">Select Module</label>
+              <label className="block font-medium mb-1">Select Subject</label>
               <select
                 value={module}
                 onChange={(e) => setModule(e.target.value)}
