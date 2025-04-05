@@ -4,7 +4,7 @@ import { NextRequest,NextResponse } from "next/server";
 import mongoose from "mongoose";
 
 interface Params {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }
 
 export async function GET(request:NextRequest,{params} : Params){

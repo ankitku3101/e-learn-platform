@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import quiz from "@/models/quiz";
 
 interface Param{
-    params:{id:string}
+    params: Promise<{ id: string }>;
 }
 
 export async function POST(request:NextRequest,{params}:Param){

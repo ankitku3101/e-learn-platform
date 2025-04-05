@@ -53,6 +53,7 @@ const Dashboard = () => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <div className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-4 transition-all duration-300 flex flex-col`}>
+          {/* Sidebar Toggle */}
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
             className="absolute top-4 right-4 text-white hover:text-gray-300"
@@ -62,15 +63,15 @@ const Dashboard = () => {
 
           <div className="flex items-center justify-center mb-6 mt-6" />
 
-          {/* Navigation with links */}
+          {/* Navigation */}
           <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" href="/dashboard" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={BsPencilSquare} text="My Courses" href="/courses" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUsers} text="Students" href="/students" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiClipboard} text="Quizzes" href="/quizzes" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiBarChart2} text="Analytics" href="/analytics" isOpen={isSidebarOpen} />
-            <SidebarLink Icon={FiUser} text="Profile" href="/profile" isOpen={isSidebarOpen} />
+            <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} href="/faculty/Mycourse" />
+            <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/student-performance" />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/faculty/quizzes" />
+            <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} href="/faculty/analytics" />
+            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/faculty/profile" />
           </nav>
+
           <div className="mt-auto border-t pt-4">
             <SidebarLink Icon={FiLogOut} text="Logout" href="/" isOpen={isSidebarOpen} />
           </div>
@@ -122,13 +123,23 @@ const Dashboard = () => {
   );
 };
 
-// 👉 Updated SidebarLink with routing support
-const SidebarLink = ({ Icon, text, href, isOpen }: { Icon: any; text: string; href: string; isOpen: boolean }) => (
-  <Link href={href} passHref legacyBehavior>
-    <a className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
+// Sidebar Link with routing
+const SidebarLink = ({
+  Icon,
+  text,
+  isOpen,
+  href,
+}: {
+  Icon: any;
+  text: string;
+  isOpen: boolean;
+  href: string;
+}) => (
+  <Link href={href}>
+    <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
       <Icon size={20} />
       <span className={`${isOpen ? "block" : "hidden"} text-sm`}>{text}</span>
-    </a>
+    </div>
   </Link>
 );
 
