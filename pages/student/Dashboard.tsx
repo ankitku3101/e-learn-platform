@@ -66,7 +66,7 @@ const StudentDashboard = () => {
 
           <nav className="space-y-3 mt-12">
             <SidebarLink Icon={FiBookOpen} text="View All Courses" isOpen={isSidebarOpen} href="/student/view-all-courses" />
-            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quizzes" />
+            <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quiz-management" />
             <SidebarLink Icon={FiBarChart2} text="Grades & Feedback" isOpen={isSidebarOpen} href="/student/grades-feedback" />
             <SidebarLink Icon={FiVideo} text="Lecture Access" isOpen={isSidebarOpen} href="/student/lecture-access" />
             <SidebarLink Icon={FiMessageCircle} text="Chat" isOpen={isSidebarOpen} href="/student/chat" />
