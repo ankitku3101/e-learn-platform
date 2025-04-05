@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import BackgroundGradient from "@/components/BackgroundGradient";
 
@@ -20,13 +20,15 @@ const Navbar = () => {
 };
 
 const LectureAccess = () => {
+  const [savedMaterials, setSavedMaterials] = useState<string[]>([]);
+
   const [courses] = useState([
     {
       id: 1,
       name: "Mathematics",
       recordedLectures: [
         { id: 1, title: "Algebra Basics", videoUrl: "https://www.youtube.com/embed/5o3fMLPY7qY" },
-        { id: 2, title: "Linear Equations", videoUrl: "https://www.youtube.com/embed/nCUp_XwK1Uc" },
+        { id: 2, title: "Linear Equations", videoUrl: "https://www.youtube.com/embed/sCkZDWe_GIY" }, // ✅ Working embed
       ],
       liveClassLink: "https://meet.google.com/math-live",
       materials: [
@@ -38,7 +40,7 @@ const LectureAccess = () => {
       id: 2,
       name: "Physics",
       recordedLectures: [
-        { id: 1, title: "Motion & Laws", videoUrl: "https://www.youtube.com/embed/x2gr-CvEhiQ" },
+        { id: 1, title: "Motion & Laws", videoUrl: "https://www.youtube.com/embed/9PA_ymn3Q1w" }, // ✅ Working embed
       ],
       liveClassLink: "https://meet.google.com/physics-live",
       materials: [
@@ -46,6 +48,22 @@ const LectureAccess = () => {
       ],
     },
   ]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("savedMaterials") || "[]");
+    setSavedMaterials(saved);
+  }, []);
+
+  const handleToggleSave = (materialKey: string) => {
+    let updated = [...savedMaterials];
+    if (savedMaterials.includes(materialKey)) {
+      updated = updated.filter((id) => id !== materialKey);
+    } else {
+      updated.push(materialKey);
+    }
+    setSavedMaterials(updated);
+    localStorage.setItem("savedMaterials", JSON.stringify(updated));
+  };
 
   return (
     <div className="relative">
@@ -92,13 +110,32 @@ const LectureAccess = () => {
               <div>
                 <h4 className="text-lg font-medium mb-2">Course Materials</h4>
                 <ul className="list-disc list-inside space-y-2">
-                  {course.materials.map((mat) => (
-                    <li key={mat.id}>
-                      <a href={mat.fileUrl} className="text-blue-700 hover:underline" download>
-                        📄 {mat.title}
-                      </a>
-                    </li>
-                  ))}
+                  {course.materials.map((mat) => {
+                    const materialKey = `${course.id}-${mat.id}`;
+                    const isSaved = savedMaterials.includes(materialKey);
+                    return (
+                      <li key={mat.id} className="flex justify-between items-center">
+                        <span>📄 {mat.title}</span>
+                        <div className="flex gap-2">
+                          <a
+                            href={mat.fileUrl}
+                            download
+                            className="text-xs px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                          >
+                            📥 Download
+                          </a>
+                          <button
+                            onClick={() => handleToggleSave(materialKey)}
+                            className={`text-xs px-3 py-1 rounded ${
+                              isSaved ? "bg-red-500 hover:bg-red-600" : "bg-green-600 hover:bg-green-700"
+                            } text-white`}
+                          >
+                            {isSaved ? "Unsave" : "Save"}
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
