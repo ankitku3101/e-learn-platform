@@ -44,9 +44,12 @@ export default function CoursesPage() {
       try {
         const res = await fetch(`/api/v1/course/course-of-faculty/${facultyId}`);
         const data = await res.json();
+        console.log("Course API response:", data);
         if (data.success) {
           setCourses(data.data);
-          setTotalCourses(data.totalCourses);
+          setTotalCourses(data.totalCourses || data.data.length);
+        } else {
+          console.error("API Error:", data.message);
         }
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -57,6 +60,7 @@ export default function CoursesPage() {
 
     fetchCourses();
   }, [facultyId, page]); 
+
   return (
     <div className='relative'>
       <Navbar />
@@ -125,7 +129,7 @@ const Navbar = () => {
       <div className="flex items-center gap-2">
         <h1 className="text-base font-bold tracking-tight md:text-2xl">UNILEARN</h1>
       </div>
-      <Link href={"/student"}>
+      <Link href={"/faculty"}>
         <button className="cursor-pointer w-24 transform rounded-lg bg-[#27187E] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FF8600] md:w-auto dark:bg-white dark:text-black dark:hover:bg-gray-200">
           Back to Home
         </button>

@@ -9,12 +9,28 @@ import {
   FiMessageCircle
 } from "react-icons/fi";
 import { useEffect, useState, JSX } from "react";
+import { getSession } from "next-auth/react";
 
 const StudentDashboard = () => {
   const router = useRouter();
-  const [firstName] = useState("Student");
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const validateSession = async () => {
+      const session = await getSession();
+      if (!session || session?.user?.role !== "student") {
+        router.push("/auth/signin");
+      } else {
+        setFirstName(session?.user?.name || "student");
+      }
+      setLoading(false);
+    };
+    validateSession();
+  }, [router]);
 
   useEffect(() => {
     const stored = localStorage.getItem("notifications");
