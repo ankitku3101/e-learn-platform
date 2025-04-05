@@ -4,7 +4,8 @@ import Link from "next/link"; // ← IMPORT LINK
 import { JSX, useEffect, useState } from "react";
 import {
   FiMenu, FiBookOpen, FiUsers, FiClipboard,
-  FiBarChart2, FiUser, FiLogOut, FiEdit
+  FiBarChart2, FiUser, FiLogOut, FiEdit,
+  FiMessageCircle
 } from "react-icons/fi";
 import { BsPencilSquare } from "react-icons/bs";
 import { useRouter } from "next/navigation";
@@ -70,6 +71,7 @@ const Dashboard = () => {
             <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/student-performance" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/faculty/quiz-management" />
             <SidebarLink Icon={FiBarChart2} text="Notification & Remainders" isOpen={isSidebarOpen} href="/faculty/Notifications" />
+            <SidebarLink Icon={FiMessageCircle} text="Chat" isOpen={isSidebarOpen} href="/faculty/chat" />
           </nav>
 
           <div className="mt-auto border-t pt-4">
