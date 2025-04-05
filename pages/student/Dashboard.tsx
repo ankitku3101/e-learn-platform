@@ -1,7 +1,5 @@
 "use client";
 
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase"; // 
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,29 +12,14 @@ import { useEffect, useState, JSX } from "react";
 
 const StudentDashboard = () => {
   const router = useRouter();
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notifications, setNotifications] = useState<any[]>([]); // <-- NEW
+  const [firstName] = useState("Student");
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setFirstName(user.displayName || user.email?.split("@")[0] || "Student");
-      } else {
-        router.push("/auth/signin");
-      }
-      setLoading(false);
-    });
-
-
-    const stored = localStorage.getItem("notifications"); // <-- NEW
-    if (stored) setNotifications(JSON.parse(stored));    // <-- NEW
-
-    return () => unsubscribe();
-  }, [router]);
-
-  if (loading) return <div className="p-8">Loading...</div>;
+    const stored = localStorage.getItem("notifications");
+    if (stored) setNotifications(JSON.parse(stored));
+  }, []);
 
   const courses = [
     { title: "Data Structures", color: "bg-[#758BFD]" },
@@ -75,7 +58,7 @@ const StudentDashboard = () => {
 
           <div className="mt-auto border-t pt-4">
             <button
-              onClick={() => auth.signOut().then(() => router.push("/auth/signin"))}
+              onClick={() => router.push("/auth/signin")}
               className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg transition"
             >
               <FiLogOut size={20} />
@@ -86,7 +69,6 @@ const StudentDashboard = () => {
 
         {/* Main Content */}
         <div className="flex-1 p-8">
-          {/* Info */}
           <div className="bg-white p-5 rounded-lg shadow-md flex flex-col sm:flex-row items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold text-[#27187E]">Student Dashboard</h2>
