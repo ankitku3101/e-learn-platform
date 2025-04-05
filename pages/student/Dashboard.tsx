@@ -1,39 +1,42 @@
 "use client";
 
-import { getSession } from "next-auth/react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase"; // 
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { JSX, useEffect, useState } from "react";
 import {
   FiMenu, FiBookOpen, FiClipboard, FiBarChart2,
-  FiUser, FiLogOut, FiEdit, FiVideo, FiBell
+  FiUser, FiLogOut, FiEdit, FiVideo, FiBell,
+  FiMessageCircle
 } from "react-icons/fi";
+import { useEffect, useState, JSX } from "react";
 
 const StudentDashboard = () => {
   const router = useRouter();
   const [firstName, setFirstName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState<any[]>([]); // <-- NEW
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const validateSession = async () => {
-      const session = await getSession();
-      if (!session || session?.user?.role !== "student") {
-        router.push("/auth/signin");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setFirstName(user.displayName || user.email?.split("@")[0] || "Student");
       } else {
-        setFirstName(session?.user?.name || "Student");
+        router.push("/auth/signin");
       }
       setLoading(false);
-    };
+    });
+
 
     const stored = localStorage.getItem("notifications"); // <-- NEW
     if (stored) setNotifications(JSON.parse(stored));    // <-- NEW
 
-    validateSession();
+    return () => unsubscribe();
   }, [router]);
 
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  if (loading) return <div className="p-8">Loading...</div>;
 
   const courses = [
     { title: "Data Structures", color: "bg-[#758BFD]" },
@@ -58,10 +61,7 @@ const StudentDashboard = () => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <div className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-[#27187E] text-white h-full p-4 transition-all duration-300 flex flex-col`}>
-          <button
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="absolute top-4 right-4 text-white hover:text-gray-300"
-          >
+          <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="absolute top-4 right-4 text-white hover:text-gray-300">
             <FiMenu size={24} />
           </button>
 
@@ -70,15 +70,23 @@ const StudentDashboard = () => {
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quizzes" />
             <SidebarLink Icon={FiBarChart2} text="Grades & Feedback" isOpen={isSidebarOpen} href="/student/grades-feedback" />
             <SidebarLink Icon={FiVideo} text="Lecture Access" isOpen={isSidebarOpen} href="/student/lecture-access" />
+            <SidebarLink Icon={FiMessageCircle} text="Chat" isOpen={isSidebarOpen} href="/student/chat" />
           </nav>
+
           <div className="mt-auto border-t pt-4">
-            <SidebarLink Icon={FiLogOut} text="Logout" isOpen={isSidebarOpen} href="/" />
+            <button
+              onClick={() => auth.signOut().then(() => router.push("/auth/signin"))}
+              className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg transition"
+            >
+              <FiLogOut size={20} />
+              <span className={`${isSidebarOpen ? "block" : "hidden"} text-sm font-medium`}>Logout</span>
+            </button>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 p-8">
-          {/* Student Info Card */}
+          {/* Info */}
           <div className="bg-white p-5 rounded-lg shadow-md flex flex-col sm:flex-row items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold text-[#27187E]">Student Dashboard</h2>
@@ -91,7 +99,7 @@ const StudentDashboard = () => {
             </button>
           </div>
 
-          {/* Stats Section */}
+          {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <StatCard title="Enrolled Courses" value="3" icon={<FiBookOpen size={30} />} />
             <StatCard title="Overall GPA" value="3.75" icon={<FiBarChart2 size={30} />} />
@@ -99,7 +107,7 @@ const StudentDashboard = () => {
             <StatCard title="Completed Courses" value="2" icon={<FiBookOpen size={30} />} />
           </div>
 
-          {/* Courses Section */}
+          {/* Courses */}
           <h3 className="mt-6 text-xl font-bold text-[#27187E]">My Courses</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
             {courses.map((course, index) => (
@@ -127,7 +135,6 @@ const StudentDashboard = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-[#1E1E2F] text-white text-center py-3 text-sm">
         © {new Date().getFullYear()} Unilearn. All rights reserved.
       </footer>
@@ -135,18 +142,7 @@ const StudentDashboard = () => {
   );
 };
 
-// Sidebar Link with navigation
-const SidebarLink = ({
-  Icon,
-  text,
-  isOpen,
-  href
-}: {
-  Icon: any;
-  text: string;
-  isOpen: boolean;
-  href: string;
-}) => (
+const SidebarLink = ({ Icon, text, isOpen, href }: { Icon: any; text: string; isOpen: boolean; href: string }) => (
   <Link href={href}>
     <div className="flex items-center gap-3 p-3 hover:bg-[#758BFD] rounded-lg cursor-pointer transition">
       <Icon size={20} />
@@ -155,16 +151,7 @@ const SidebarLink = ({
   </Link>
 );
 
-// Stat Card Component
-const StatCard = ({
-  title,
-  value,
-  icon
-}: {
-  title: string;
-  value: string;
-  icon: JSX.Element;
-}) => (
+const StatCard = ({ title, value, icon }: { title: string; value: string; icon: JSX.Element }) => (
   <div className="bg-white p-5 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition">
     <div className="text-[#27187E]">{icon}</div>
     <div>
