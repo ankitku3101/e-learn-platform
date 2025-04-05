@@ -1,13 +1,15 @@
-```markdown
+---
+
+```md
 # Unilearn – A College-Oriented E-Learning Platform
 
-Unilearn is a full-stack web-based e-learning platform built to simplify and enhance the learning experience for colleges. It bridges communication gaps, streamlines course handling, and brings together students, faculty, and administrators on a unified digital platform.
+**Unilearn** is a full-stack web-based e-learning platform built to simplify and enhance the academic experience for colleges. It bridges communication gaps, streamlines course handling, and brings together students, faculty, and admins on a unified digital platform.
 
 ---
 
 ## 🌐 Live Demo
 
-🔗 [Visit Live](https://unilearn-one.vercel.app)
+**🔗 [Visit Unilearn](https://unilearn-one.vercel.app)**
 
 ---
 
@@ -16,7 +18,7 @@ Unilearn is a full-stack web-based e-learning platform built to simplify and enh
 - Enable smooth communication between students and faculty.
 - Centralize lecture delivery, assignment submissions, and quizzes.
 - Provide real-time academic performance tracking.
-- Create a scalable solution that adapts to various college-level institutions.
+- Create a scalable solution that adapts to various institutions.
 
 ---
 
@@ -28,7 +30,7 @@ Unilearn is a full-stack web-based e-learning platform built to simplify and enh
 | **Faculty** | Create courses, upload content, assign quizzes/assignments, and track student performance. |
 | **Student** | Enroll in courses, access content, submit work, take quizzes, and view feedback. |
 
-> 📝 **Note**: Self-registration is disabled. Admin provides login credentials for each user.
+> Note: Self-registration is disabled. Admin provides login credentials for each user.
 
 ---
 
@@ -48,51 +50,48 @@ Unilearn is a full-stack web-based e-learning platform built to simplify and enh
 ## 🧩 Core Features
 
 ### Admin Panel
-
-- **User Management** – Add and manage faculty or student accounts.
+- **User Management** – Add and manage student/faculty accounts.
 - **Course Management** – Create, edit, and delete courses.
 - **Reports** – View student progress and faculty activity logs.
-- **Monitoring** – Track platform usage and respond to support issues.
-- **Announcements** – Broadcast messages to all users.
+- **Monitoring** – Track platform usage and manage system settings.
+- **Announcements** – Broadcast important notices across the platform.
 
 ### Faculty Dashboard
-
-- **Course Control** – Upload lectures (videos, PDFs, notes) and structure modules.
-- **Assignments & Quizzes** – Set deadlines, enable auto-grading, and evaluate responses.
-- **Performance Monitoring** – Track student scores and provide personalized feedback.
-- **Reminders & Alerts** – Notify students about important events or deadlines.
+- **Course Control** – Upload lectures in the form of videos, PDFs, or notes.
+- **Assignments & Quizzes** – Create tests with deadlines and auto-grading support.
+- **Performance Tracking** – Monitor student progress and offer feedback.
+- **Reminders & Alerts** – Send important notifications to students.
 
 ### Student Dashboard
-
-- **Login & Auth** – Access with credentials shared by admin.
-- **Enroll & Explore** – Join courses and explore content.
-- **Lecture Access** – View resources, notes, and recordings.
-- **Submissions** – Upload assignments before due dates.
-- **Quiz Participation** – Attempt quizzes and exams online.
-- **Progress Review** – Track grades, feedback, and performance.
-- **Push Notifications** – Stay informed about tasks, deadlines, and announcements.
+- **Login & Auth** – Secure login using admin-provided credentials.
+- **Course Enrollment** – Browse and join available courses.
+- **Lecture Access** – Watch recorded/live lectures and access learning materials.
+- **Assignment Submission** – Upload and track submissions before deadlines.
+- **Quiz Participation** – Attempt online quizzes and view instant results.
+- **Progress Review** – Track grades, analytics, and faculty feedback.
+- **Reminders** – Get push notifications for upcoming tasks or announcements.
 
 ---
 
 ## 💡 Bonus Features
 
-| Feature                        | Description |
-|-------------------------------|-------------|
-| AI-based Recommendations      | Suggests courses based on interest & history. |
-| Gamification & Leaderboard    | Earn badges and track rankings. |
-| Offline Access                | Download resources for later use. |
-| Student-Faculty Chat          | Realtime direct chat (Firebase). |
-| Plagiarism Detection          | Verify assignment originality automatically. |
+| Feature                    | Description |
+|----------------------------|-------------|
+| AI-based Recommendations   | Suggests courses based on interests and history. |
+| Gamification & Leaderboard | Badges and rankings to boost engagement. |
+| Offline Access             | Download course materials for offline study. |
+| Student-Faculty Chat       | Realtime chat using Firebase integration. |
+| Plagiarism Detection       | Validate originality in submitted assignments. |
 
 ---
 
 ## 🚀 Future Scope
 
-- Integrate live class support using video conferencing tools.
-- Visual analytics dashboards for students and faculty.
-- Academic calendar integration with event reminders.
-- Discussion forums and peer-based collaboration.
-- Alumni dashboards and career placement support.
+- Live class support using video conferencing APIs.
+- Analytics dashboards with data visualizations.
+- Academic calendar and event scheduler.
+- Student forums for collaborative discussions.
+- Alumni dashboards and placement assistance.
 
 ---
 
@@ -137,23 +136,16 @@ yarn install
 
 ### 3. Configure Environment Variables
 
-Create a `.env.local` file and add the following:
+Create a `.env.local` file in the root directory and add:
 
 ```env
 MONGODB_URI=your_mongodb_uri
 NEXTAUTH_SECRET=your_nextauth_secret
 NEXTAUTH_URL=http://localhost:3000
 
-FIREBASE_API_KEY=your_firebase_key
-FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-FIREBASE_APP_ID=your_app_id
-FIREBASE_DATABASE_URL=your_firebase_database_url
 ```
 
-### 4. Start Development Server
+### 4. Run the Development Server
 
 ```bash
 npm run dev
@@ -161,30 +153,31 @@ npm run dev
 yarn dev
 ```
 
-Go to `http://localhost:3000` in your browser.
+Visit: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📁 Project Structure
+## 📁 Folder Structure
 
 ```
 .
 ├── components/       # Reusable UI components
-├── pages/            # All route-level components
-│   └── api/          # Backend API endpoints
-├── db/               # Database configs and schemas
-├── lib/              # Utility functions
-├── firebase.js       # Firebase setup for chat
+├── pages/            # Next.js routes
+│   └── api/          # Backend APIs
+├── db/               # Database schema & config
+├── lib/              # Helper functions
+├── firebase.js       # Firebase chat config
 ├── public/           # Static assets
-└── .env.local        # Local environment variables
+└── .env.local        # Environment variables
 ```
 
 ---
 
 ## 🔗 Deployment
 
-The application is deployed using **Vercel**. Visit:  
-**[https://unilearn-one.vercel.app](https://unilearn-one.vercel.app)**
+This project is deployed on **Vercel**.  
+Live URL 👉 **[https://unilearn-one.vercel.app](https://unilearn-one.vercel.app)**
 
 ---
 ```
+
