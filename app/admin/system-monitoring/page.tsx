@@ -1,125 +1,166 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import BackgroundGradient from "@/components/BackgroundGradient";
-import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
+import { Bell, X } from "lucide-react";
 
-const SystemMonitoring = () => {
-  const [usageStats, setUsageStats] = useState({
-    activeUsers: 234,
-    dailyVisits: 1234,
-    uptime: "99.9%",
-  });
+// Emojis by type
+const getTypeEmoji = (type: string) => {
+  switch (type) {
+    case "assignment":
+      return "📘";
+    case "exam":
+      return "📝";
+    case "announcement":
+      return "📢";
+    default:
+      return "🔔";
+  }
+};
 
-  const [supportRequests, setSupportRequests] = useState([
-    { id: 1, user: "Ankit", issue: "Login not working", status: "Pending" },
-    { id: 2, user: "Meera", issue: "Video not loading", status: "Resolved" },
-  ]);
-
-  const [settings, setSettings] = useState([
-    { key: "Theme", value: "Light Mode" },
-    { key: "Notifications", value: "Enabled" },
-    { key: "Auto Backup", value: "Weekly" },
-  ]);
+// Notification Bell (for student/faculty navbars)
+const NotificationBell = () => {
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Simulate API fetch
+    const stored = localStorage.getItem("student_notifications");
+    if (stored) setNotifications(JSON.parse(stored));
   }, []);
 
-  const handleSettingChange = (index: number, newValue: string) => {
-    const updated = [...settings];
-    updated[index].value = newValue;
-    setSettings(updated);
-  };
+  useEffect(() => {
+    localStorage.setItem("student_notifications", JSON.stringify(notifications));
+  }, [notifications]);
 
-  const getSettingOptions = (key: string) => {
-    switch (key) {
-      case "Theme":
-        return ["Dark Mode", "Light Mode"];
-      case "Notifications":
-        return ["Enabled", "Disabled"];
-      case "Auto Backup":
-        return ["Daily","Weekly", "Monthly"];
-      default:
-        return ["Option 1", "Option 2"];
-    }
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const markAsRead = (id: number) => {
+    setNotifications(notifications.filter((n) => n.id !== id));
   };
 
   return (
-    <div className="relative">
-      <Navbar />
-      <div className="min-h-screen flex items-center justify-center text-black pt-16">
-        <BackgroundGradient color1="#AEB8FE" color2="#758BFD" position="bottom" id={10} />
-        <div className="w-full max-w-6xl bg-white p-8 rounded-lg shadow-lg mt-12">
-          <h2 className="text-2xl font-bold text-center mb-8">System Monitoring</h2>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+      >
+        <Bell size={24} />
+        {notifications.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+            {notifications.length}
+          </span>
+        )}
+      </button>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Platform Usage */}
-            <div className="bg-[#F1F2F6] p-6 rounded-xl shadow-md hover:shadow-lg transition-transform hover:scale-[1.02]">
-              <h3 className="text-xl font-semibold text-[#27187E] mb-4">📈 Platform Usage</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li>Active Users: <b>{usageStats.activeUsers}</b></li>
-                <li>Daily Visits: <b>{usageStats.dailyVisits}</b></li>
-                <li>Uptime: <b>{usageStats.uptime}</b></li>
-              </ul>
-            </div>
-
-            {/* Support Requests */}
-            <div className="bg-[#F1F2F6] p-6 rounded-xl shadow-md hover:shadow-lg transition-transform hover:scale-[1.02]">
-              <h3 className="text-xl font-semibold text-[#27187E] mb-4">🛠️ Support Requests</h3>
-              <ul className="space-y-4 text-sm text-gray-700">
-                {supportRequests.map((req) => (
-                  <li key={req.id} className="bg-white p-3 rounded-md shadow-sm hover:shadow-md transition">
-                    <b>{req.user}</b>: {req.issue} <br />
-                    <span className={`text-xs mt-1 inline-block px-2 py-1 rounded-full ${req.status === "Resolved" ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800"}`}>
-                      {req.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Platform Settings */}
-            <div className="bg-[#F1F2F6] p-6 rounded-xl shadow-md hover:shadow-lg transition-transform hover:scale-[1.02]">
-              <h3 className="text-xl font-semibold text-[#27187E] mb-4">⚙️ Platform Settings</h3>
-              <div className="space-y-4">
-                {settings.map((setting, index) => (
-                  <div key={index} className="bg-white p-4 rounded-md shadow hover:shadow-md transition-transform hover:scale-[1.02]">
-                    <h4 className="font-bold text-[#27187E] mb-2">{setting.key}</h4>
-                    <select
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#27187E]"
-                      value={setting.value}
-                      onChange={(e) => handleSettingChange(index, e.target.value)}
-                    >
-                      {getSettingOptions(setting.key).map((option) => (
-                        <option key={option} value={option}>{option}</option>
-                      ))}
-                    </select>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50">
+          <h3 className="font-bold text-lg mb-2">Notifications</h3>
+          {notifications.length === 0 ? (
+            <p className="text-gray-500">No new notifications</p>
+          ) : (
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {notifications.map((notif) => (
+                <div
+                  key={notif.id}
+                  className="border-b pb-2 flex justify-between items-start hover:bg-gray-50 p-2 rounded-md transition"
+                >
+                  <div>
+                    <p className="font-semibold">
+                      {getTypeEmoji(notif.type)} {notif.title}
+                    </p>
+                    <p className="text-sm text-gray-600">{notif.message}</p>
                   </div>
-                ))}
-              </div>
+                  <button
+                    onClick={() => markAsRead(notif.id)}
+                    className="text-gray-400 hover:text-red-500"
+                    title="Mark as read"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
             </div>
-          </div>
-
+          )}
         </div>
+      )}
+    </div>
+  );
+};
+
+// Page Component: Send + View Notification
+const NotificationPage = () => {
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("assignment");
+
+  const handleSend = () => {
+    const existing = JSON.parse(localStorage.getItem("student_notifications") || "[]");
+    const newNotification = {
+      id: Date.now(),
+      title,
+      message,
+      type,
+    };
+    const updated = [newNotification, ...existing];
+    localStorage.setItem("student_notifications", JSON.stringify(updated));
+    setTitle("");
+    setMessage("");
+    alert("✅ Notification sent to students!");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
+        <h1 className="text-2xl font-bold text-[#27187E]">UNILEARN - Notifications</h1>
+        <NotificationBell />
+      </nav>
+
+      {/* Send Notification Form */}
+      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-bold mb-4">📢 Send Notification to Students</h2>
+
+        <input
+          type="text"
+          placeholder="Title"
+          className="w-full px-3 py-2 border rounded mb-3"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Message"
+          className="w-full px-3 py-2 border rounded mb-3"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <select
+          className="w-full px-3 py-2 border rounded mb-4"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="assignment">📘 Assignment</option>
+          <option value="exam">📝 Exam</option>
+          <option value="announcement">📢 Announcement</option>
+        </select>
+
+        <button
+          onClick={handleSend}
+          className="bg-[#27187E] hover:bg-[#FF8600] text-white px-4 py-2 rounded font-semibold transition"
+        >
+          Send Notification
+        </button>
       </div>
     </div>
   );
 };
 
-const Navbar = () => {
-  return (
-    <nav className="absolute flex w-full items-center justify-between border-t border-b border-neutral-200 px-8 py-4 dark:border-neutral-800">
-      <div className="flex items-center gap-2">
-        <h1 className="text-base font-bold tracking-tight md:text-2xl">UNILEARN</h1>
-      </div>
-      <Link href={"/admin"}>
-        <button className="cursor-pointer w-24 transform rounded-lg bg-[#27187E] px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FF8600] md:w-auto dark:bg-white dark:text-black dark:hover:bg-gray-200">
-          Back to Home
-        </button>
-      </Link>
-    </nav>
-  );
-};
-
-export default SystemMonitoring;
+export default NotificationPage;

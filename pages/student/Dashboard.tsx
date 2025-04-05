@@ -1,4 +1,5 @@
 "use client";
+
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase"; // 
 import Image from "next/image";
@@ -6,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   FiMenu, FiBookOpen, FiClipboard, FiBarChart2,
-  FiUser, FiLogOut, FiEdit, FiVideo,
+  FiUser, FiLogOut, FiEdit, FiVideo, FiBell,
   FiMessageCircle
 } from "react-icons/fi";
 import { useEffect, useState, JSX } from "react";
@@ -15,6 +16,7 @@ const StudentDashboard = () => {
   const router = useRouter();
   const [firstName, setFirstName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState<any[]>([]); // <-- NEW
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -26,6 +28,10 @@ const StudentDashboard = () => {
       }
       setLoading(false);
     });
+
+
+    const stored = localStorage.getItem("notifications"); // <-- NEW
+    if (stored) setNotifications(JSON.parse(stored));    // <-- NEW
 
     return () => unsubscribe();
   }, [router]);
@@ -62,9 +68,8 @@ const StudentDashboard = () => {
           <nav className="space-y-3 mt-12">
             <SidebarLink Icon={FiBookOpen} text="View All Courses" isOpen={isSidebarOpen} href="/student/view-all-courses" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/student/quizzes" />
-            <SidebarLink Icon={FiBarChart2} text="Performance" isOpen={isSidebarOpen} href="/student/performance" />
-            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/student/profile" />
-            <SidebarLink Icon={FiVideo} text="Live Classes" isOpen={isSidebarOpen} href="/student/live-classes" />
+            <SidebarLink Icon={FiBarChart2} text="Grades & Feedback" isOpen={isSidebarOpen} href="/student/grades-feedback" />
+            <SidebarLink Icon={FiVideo} text="Lecture Access" isOpen={isSidebarOpen} href="/student/lecture-access" />
             <SidebarLink Icon={FiMessageCircle} text="Chat" isOpen={isSidebarOpen} href="/student/chat" />
           </nav>
 
@@ -84,7 +89,7 @@ const StudentDashboard = () => {
           {/* Info */}
           <div className="bg-white p-5 rounded-lg shadow-md flex flex-col sm:flex-row items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-[#27187E] text-center sm:text-left">Student Dashboard</h2>
+              <h2 className="text-2xl font-bold text-[#27187E]">Student Dashboard</h2>
               <div className="bg-[#F8F9FC] p-4 rounded-lg mt-4 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#27187E]">Welcome {firstName}</h3>
               </div>
@@ -110,6 +115,22 @@ const StudentDashboard = () => {
                 <h4 className="text-lg font-semibold text-center">{course.title}</h4>
               </div>
             ))}
+          </div>
+
+          {/* 🔔 Notification Section */}
+          <h3 className="mt-10 text-xl font-bold text-[#27187E] flex items-center gap-2"><FiBell /> Notifications</h3>
+          <div className="space-y-4 mt-4">
+            {notifications.length === 0 ? (
+              <p className="text-gray-500 text-sm">No notifications available.</p>
+            ) : (
+              notifications.map((notif, index) => (
+                <div key={index} className="bg-white border-l-4 border-[#FF8600] shadow-sm p-4 rounded-lg">
+                  <h4 className="text-md font-semibold text-[#27187E]">{notif.title}</h4>
+                  <p className="text-sm text-gray-700">{notif.message}</p>
+                  <span className="text-xs text-gray-500">Type: {notif.type}</span>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

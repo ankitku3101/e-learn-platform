@@ -65,12 +65,10 @@ const Dashboard = () => {
 
           {/* Navigation */}
           <nav className="space-y-3">
-            <SidebarLink Icon={FiBookOpen} text="Dashboard" isOpen={isSidebarOpen} href="/faculty/dashboard" />
-            <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} href="/faculty/courses" />
-            <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/students" />
+            <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} href="/faculty/Mycourse" />
+            <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/student-performance" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/faculty/quizzes" />
-            <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} href="/faculty/analytics" />
-            <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/faculty/profile" />
+            <SidebarLink Icon={FiBarChart2} text="Notification & Remainders" isOpen={isSidebarOpen} href="/faculty/Notifications" />
           </nav>
 
           <div className="mt-auto border-t pt-4">
