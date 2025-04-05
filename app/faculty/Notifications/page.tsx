@@ -6,6 +6,14 @@ import { toast } from "sonner";
 import Link from "next/link";
 import BackgroundGradient from "@/components/BackgroundGradient";
 
+// ✅ Define a type for notification
+type Notification = {
+  id: number;
+  title: string;
+  message: string;
+  type: "assignment" | "exam" | "announcement";
+};
+
 const Navbar = () => {
   return (
     <nav className="absolute flex w-full items-center justify-between border-t border-b border-neutral-200 px-8 py-4 dark:border-neutral-800 bg-white z-50">
@@ -22,15 +30,15 @@ const Navbar = () => {
 };
 
 const AdminNotificationManager = () => {
-  const [notifications, setNotifications] = useState([
+  const [notifications, setNotifications] = useState<Notification[]>([
     { id: 1, title: "New Assignment", message: "Submit by 5th April", type: "assignment" },
     { id: 2, title: "Exam Scheduled", message: "Maths Exam on 10th April", type: "exam" },
   ]);
-  const [editId, setEditId] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [editId, setEditId] = useState<number | null>(null);
+  const [formData, setFormData] = useState<Partial<Notification>>({});
   const router = useRouter();
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: number) => {
     const selected = notifications.find((n) => n.id === id);
     if (selected) {
       setEditId(id);
@@ -38,7 +46,7 @@ const AdminNotificationManager = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     const updated = notifications.filter((n) => n.id !== id);
     setNotifications(updated);
     localStorage.setItem("notifications", JSON.stringify(updated));
@@ -46,9 +54,15 @@ const AdminNotificationManager = () => {
   };
 
   const handleUpdate = () => {
+    if (!formData.title || !formData.message || !formData.type || editId === null) {
+      toast.error("All fields are required");
+      return;
+    }
+
     const updated = notifications.map((n) =>
-      n.id === editId ? { ...n, ...formData } : n
+      n.id === editId ? { ...n, ...formData } as Notification : n
     );
+
     setNotifications(updated);
     localStorage.setItem("notifications", JSON.stringify(updated));
     toast.success("Notification updated and pushed to student dashboard");
@@ -94,7 +108,7 @@ const AdminNotificationManager = () => {
             ))}
           </div>
 
-          {editId && (
+          {editId !== null && (
             <div className="mt-10 border-t pt-6">
               <h3 className="text-xl font-semibold mb-4">Edit Notification</h3>
               <div className="space-y-4">
@@ -115,8 +129,9 @@ const AdminNotificationManager = () => {
                 <select
                   className="w-full border p-3 rounded"
                   value={formData.type || ""}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, type: e.target.value as Notification["type"] })}
                 >
+                  <option value="">Select Type</option>
                   <option value="assignment">Assignment</option>
                   <option value="exam">Exam</option>
                   <option value="announcement">Announcement</option>

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Param{
-    params:{id:string}
+    params: Promise<{ id: string }>;
 }
 
 export async function POST(request:NextRequest,{params}:Param){

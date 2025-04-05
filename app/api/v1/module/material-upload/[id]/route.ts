@@ -4,7 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 import module from "@/models/module";
 
 interface Params{
-    params:{id:string}
+    params: Promise<{ id: string }>;
 }
 
 cloudinary.config({

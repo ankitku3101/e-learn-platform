@@ -7,7 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import videolesson from "@/models/videolesson";
 
 interface Param{
-    params:{id:string}
+    params: Promise<{ id: string }>;
 }
 
 cloudinary.config({

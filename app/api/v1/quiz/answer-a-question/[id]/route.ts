@@ -16,9 +16,7 @@ interface SubmissionBody {
   
   // Define interface for the URL parameters
   interface Params {
-    params: {
-      id: string; // Quiz ID
-    };
+    params: Promise<{ id: string }>;
   }
   
   // Database connection function
