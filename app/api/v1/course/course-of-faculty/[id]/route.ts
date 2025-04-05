@@ -3,9 +3,15 @@ import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
+// ✅ Import the correct type for the context
+
+// 👇 FIX: Use the correct context signature
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   try {
-    const { id } = await context.params;
+    const id = params.id;
 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -29,7 +35,7 @@ export async function GET(request: NextRequest, context: { params: { id: string 
       },
     ]);
 
-    console.log("Document course fetched successfully for faculty:", id);
+    console.log("Courses fetched for faculty:", id);
 
     return NextResponse.json(
       {
