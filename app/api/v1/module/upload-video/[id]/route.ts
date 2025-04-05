@@ -1,6 +1,7 @@
 import module from "@/models/module";
 import dbConnect from "@/lib/mongodb";
 import mongoose from "mongoose";
+import { Readable } from "stream";
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import videolesson from "@/models/videolesson";
@@ -36,8 +37,26 @@ export async function POST(req:NextRequest,{params}:Param){
         const base64 = buffer.toString('base64');
         const dataUri = `data:${file.type};base64,${base64}`;
 
-        const result = await cloudinary.uploader.upload(dataUri, {
+        const streamUpload = async (buffer, options) => {
+            return new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                options,
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                }
+            );
+                
+                const bufferStream = new Readable();
+                bufferStream.push(buffer);
+                bufferStream.push(null);
+                bufferStream.pipe(uploadStream);
+            });
+        };
+
+        const result:any = await streamUpload(buffer, {
             folder: 'e_learning/files',
+            resource_type: 'auto'
         });
 
         const createVideoLesson = await videolesson.create({
@@ -46,7 +65,11 @@ export async function POST(req:NextRequest,{params}:Param){
             link:result.secure_url
         })
 
-        return NextResponse.json({message:"File uploaded successfully",data:createVideoLesson},{status:200});
+        const updateModule = await module.findByIdAndUpdate(id,{
+            $addToSet:{videos:createVideoLesson._id}
+        },{new:true})
+
+        return NextResponse.json({message:"File uploaded successfully",data:createVideoLesson,updatedModule:updateModule},{status:200});
     } catch (error) {
         console.log(error);
         return NextResponse.json({message:"Something went wrong"},{status:500});
