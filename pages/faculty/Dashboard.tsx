@@ -68,7 +68,7 @@ const Dashboard = () => {
             <SidebarLink Icon={BsPencilSquare} text="My Courses" isOpen={isSidebarOpen} href="/faculty/Mycourse" />
             <SidebarLink Icon={FiUsers} text="Students" isOpen={isSidebarOpen} href="/faculty/student-performance" />
             <SidebarLink Icon={FiClipboard} text="Quizzes" isOpen={isSidebarOpen} href="/faculty/quizzes" />
-            <SidebarLink Icon={FiBarChart2} text="Analytics" isOpen={isSidebarOpen} href="/faculty/analytics" />
+            <SidebarLink Icon={FiBarChart2} text="Notification & Remainders" isOpen={isSidebarOpen} href="/faculty/Notifications" />
             <SidebarLink Icon={FiUser} text="Profile" isOpen={isSidebarOpen} href="/faculty/profile" />
           </nav>
 
