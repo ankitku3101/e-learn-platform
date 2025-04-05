@@ -2,6 +2,7 @@ import question from "@/models/question";
 import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
+import quiz from "@/models/quiz";
 
 interface Param{
     params:{id:string}
@@ -32,6 +33,10 @@ export async function POST(request:NextRequest,{params}:Param){
             mainQuestion,
             options,
             correctOption
+        })
+
+        await quiz.findByIdAndUpdate(id,{
+            $addToSet:{questions:createQuestion._id}
         })
 
         if(!createQuestion){
