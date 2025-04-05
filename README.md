@@ -1,6 +1,3 @@
----
-
-```md
 # Unilearn – A College-Oriented E-Learning Platform
 
 **Unilearn** is a full-stack web-based e-learning platform built to simplify and enhance the academic experience for colleges. It bridges communication gaps, streamlines course handling, and brings together students, faculty, and admins on a unified digital platform.
@@ -113,7 +110,6 @@ architecture:
     - Admin creates user accounts
     - Faculty uploads course content and tracks students
     - Students access materials and submit work
-```
 
 ---
 
@@ -143,6 +139,13 @@ MONGODB_URI=your_mongodb_uri
 NEXTAUTH_SECRET=your_nextauth_secret
 NEXTAUTH_URL=http://localhost:3000
 
+FIREBASE_API_KEY=your_firebase_key
+FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+FIREBASE_APP_ID=your_app_id
+FIREBASE_DATABASE_URL=your_firebase_database_url
 ```
 
 ### 4. Run the Development Server
@@ -179,5 +182,3 @@ This project is deployed on **Vercel**.
 Live URL 👉 **[https://unilearn-one.vercel.app](https://unilearn-one.vercel.app)**
 
 ---
-```
-
